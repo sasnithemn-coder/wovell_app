@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'widgets/side_menu.dart';
+import 'motstar_page.dart';
 
 class PublicSpeakingPage extends StatelessWidget {
   const PublicSpeakingPage({super.key});
@@ -216,26 +217,52 @@ class PublicSpeakingPage extends StatelessWidget {
                       icon: Icons.wordpress,
                       title: 'MOTstar',
                       color: Colors.yellow.shade700,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const MOTstarPage()),
+                        );
+                      },
                     ),
                     _buildFeatureCard(
                       icon: Icons.calendar_month,
                       title: 'SpeechDuty',
                       color: Colors.greenAccent.shade400,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('SpeechDuty coming soon!')),
+                        );
+                      },
                     ),
                     _buildFeatureCard(
                       icon: Icons.house_rounded,
                       title: 'VozHut',
                       color: Colors.purpleAccent.shade700,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('VozHut feature coming soon!')),
+                        );
+                      },
                     ),
                     _buildFeatureCard(
                       icon: Icons.smart_toy,
                       title: 'AI Audience',
                       color: Colors.blueAccent,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('AI Audience coming soon!')),
+                        );
+                      },
                     ),
                     _buildFeatureCard(
                       icon: Icons.text_fields,
                       title: 'ScriptSharp',
                       color: Colors.orangeAccent,
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('ScriptSharp coming soon!')),
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -284,30 +311,34 @@ class PublicSpeakingPage extends StatelessWidget {
     required IconData icon,
     required String title,
     required Color color,
+    VoidCallback? onTap, // Added onTap support
   }) {
-    return Container(
-      width: 100,
-      margin: const EdgeInsets.only(right: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(color: color, width: 2),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 6),
-          Text(
-            title,
-            style: TextStyle(
-              color: const Color(0xFF1A3A5C),
-              fontWeight: FontWeight.w600,
-              fontSize: 13,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 100,
+        margin: const EdgeInsets.only(right: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: color, width: 2),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: color, size: 28),
+            const SizedBox(height: 6),
+            Text(
+              title,
+              style: const TextStyle(
+                color: Color(0xFF1A3A5C),
+                fontWeight: FontWeight.w600,
+                fontSize: 13,
+              ),
+              textAlign: TextAlign.center,
             ),
-            textAlign: TextAlign.center,
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
