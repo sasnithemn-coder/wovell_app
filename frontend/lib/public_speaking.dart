@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'widgets/side_menu.dart';
 import 'motstar_page.dart';
+import 'speech_duty_page.dart';
 
 class PublicSpeakingPage extends StatelessWidget {
   const PublicSpeakingPage({super.key});
@@ -229,9 +230,10 @@ class PublicSpeakingPage extends StatelessWidget {
                       title: 'SpeechDuty',
                       color: Colors.greenAccent.shade400,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('SpeechDuty coming soon!')),
-                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const SpeechDutyPage()),
+                        ); 
                       },
                     ),
                     _buildFeatureCard(
