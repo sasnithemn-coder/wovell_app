@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'models/user_progress.dart';
-import 'landing.dart'; // keep your existing landing import (eg SplashScreen)
-
+import 'landing.dart'; 
 void main() {
   runApp(
     ChangeNotifierProvider(
