@@ -1,5 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
+import 'notifications.dart';
+import 'profile_page.dart';
 
 class SpeechDutyPage extends StatefulWidget {
   const SpeechDutyPage({super.key});
@@ -8,489 +13,470 @@ class SpeechDutyPage extends StatefulWidget {
   State<SpeechDutyPage> createState() => _SpeechDutyPageState();
 }
 
-// --- MODEL CLASS ---------------------------------------------------
-
-class SpeechLog {
-  final String id;
-  final String label;
-  final String topic;
-  final Duration duration;
-  final Evaluation evaluation;
-  final DateTime date;
-
-  SpeechLog({
-    required this.id,
-    required this.label,
-    required this.topic,
-    required this.duration,
-    required this.evaluation,
-    required this.date,
-  });
-}
-
-enum Evaluation { bad, average, good, perfect }
-
-extension EvaluationExt on Evaluation {
-  String get label {
-    switch (this) {
-      case Evaluation.bad:
-        return 'Bad';
-      case Evaluation.average:
-        return 'Average';
-      case Evaluation.good:
-        return 'Good';
-      case Evaluation.perfect:
-        return 'Perfect';
-    }
-  }
-
-  double get progress {
-    switch (this) {
-      case Evaluation.bad:
-        return 0.25;
-      case Evaluation.average:
-        return 0.5;
-      case Evaluation.good:
-        return 0.75;
-      case Evaluation.perfect:
-        return 1.0;
-    }
-  }
-
-  Color get color {
-    switch (this) {
-      case Evaluation.bad:
-        return Colors.red;
-      case Evaluation.average:
-        return Colors.orange;
-      case Evaluation.good:
-        return Colors.green;
-      case Evaluation.perfect:
-        return Colors.blue;
-    }
-  }
-}
-
-// --- MAIN PAGE -----------------------------------------------------
-
-class _SpeechDutyPageState extends State<SpeechDutyPage>
-    with SingleTickerProviderStateMixin {
-  bool isRecording = false;
-  int elapsedSeconds = 0;
+class _SpeechDutyPageState extends State<SpeechDutyPage> {
+  final AudioRecorder _recorder = AudioRecorder();
+  bool _isRecording = false;
+  bool _timeExceeded = false;
+  Duration _recordingDuration = Duration.zero;
   Timer? _timer;
-  late AnimationController _blinkController;
-  static const int maxSeconds = 120;
-  late List<SpeechLog> logs;
+  final List<SpeechEvaluation> _evaluations = [];
 
-  @override
-  void initState() {
-    super.initState();
-    logs = _dummyLogs();
-    _blinkController =
-        AnimationController(vsync: this, duration: const Duration(milliseconds: 600))
-          ..repeat(reverse: true);
-  }
+  final List<String> _topics = [
+    "A time you helped someone",
+    "A proud moment in your life",
+    "A challenge you overcame",
+    "Describe your dream job",
+    "A time you learned something new",
+    "A place you want to visit",
+    "A book that changed you",
+    "A goal you set and achieved",
+  ];
 
   @override
   void dispose() {
     _timer?.cancel();
-    _blinkController.dispose();
     super.dispose();
   }
 
-  List<SpeechLog> _dummyLogs() {
-    final now = DateTime.now();
-    return [
-      SpeechLog(
-        id: 'today',
-        label: 'Today',
-        topic: _dailyTopic(),
-        duration: const Duration(minutes: 1, seconds: 54),
-        evaluation: Evaluation.average,
-        date: now,
-      ),
-      SpeechLog(
-        id: 'yesterday',
-        label: 'Yesterday',
-        topic: 'Preparing for an unexpected interview',
-        duration: const Duration(minutes: 1, seconds: 35),
-        evaluation: Evaluation.good,
-        date: now.subtract(const Duration(days: 1)),
-      ),
-      SpeechLog(
-        id: '03/10/2025',
-        label: '03/10/2025',
-        topic: 'The loudest lesson I learned',
-        duration: const Duration(minutes: 1, seconds: 20),
-        evaluation: Evaluation.perfect,
-        date: now.subtract(const Duration(days: 2)),
-      ),
-      SpeechLog(
-        id: '02/10/2025',
-        label: '02/10/2025',
-        topic: 'A challenging teamwork moment',
-        duration: const Duration(minutes: 2, seconds: 3),
-        evaluation: Evaluation.bad,
-        date: now.subtract(const Duration(days: 3)),
-      ),
-    ];
+  String get _topicOfTheDay {
+    final today = DateTime.now();
+    final index = (today.year + today.month + today.day) % _topics.length;
+    return _topics[index];
   }
 
-  String _dailyTopic() {
-    final topics = [
-      'Most critical moment in your life',
-      'A time you failed and learned',
-      'Your proudest achievement',
-      'A habit you would like to change',
-      'A person who inspired you',
-    ];
-    final idx = DateTime.now().day % topics.length;
-    return topics[idx];
+  String _formatDuration(Duration d) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return "${twoDigits(d.inMinutes)}:${twoDigits(d.inSeconds.remainder(60))}";
   }
 
-  void _toggleRecording() {
-    if (isRecording) {
-      _stopRecording();
-    } else {
-      _startRecording();
+  Future<void> _startRecording() async {
+    final status = await Permission.microphone.request();
+
+    if (!mounted) return;
+
+    if (!status.isGranted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Microphone permission denied')),
+      );
+      return;
     }
-  }
 
-  void _startRecording() {
+    await _recorder.start(
+      const RecordConfig(encoder: AudioEncoder.aacLc),
+      path: 'speech_${DateTime.now().millisecondsSinceEpoch}.m4a',
+    );
+
     setState(() {
-      isRecording = true;
-      elapsedSeconds = 0;
+      _isRecording = true;
+      _recordingDuration = Duration.zero;
+      _timeExceeded = false;
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() => elapsedSeconds++);
+      if (!mounted) return;
+      setState(() {
+        _recordingDuration =
+            Duration(seconds: _recordingDuration.inSeconds + 1);
+        if (_recordingDuration.inSeconds >= 120) {
+          _timeExceeded = true;
+        }
+      });
     });
   }
 
-  void _stopRecording() {
+  Future<void> _stopRecording() async {
     _timer?.cancel();
+    final path = await _recorder.stop();
+
+    if (!mounted) return;
     setState(() {
-      isRecording = false;
+      _isRecording = false;
+    });
+
+    if (path != null) {
+      _evaluateSpeech(path);
+    }
+  }
+
+  void _evaluateSpeech(String path) {
+    final seconds = _recordingDuration.inSeconds;
+    int score;
+    String remark;
+    String description;
+
+    if (seconds >= 115) {
+      score = 95;
+      remark = "Perfect";
+      description = "Great pacing and confident delivery!";
+    } else if (seconds >= 90) {
+      score = 80;
+      remark = "Good";
+      description = "Good clarity and structure, slight improvement possible.";
+    } else if (seconds >= 60) {
+      score = 60;
+      remark = "Average";
+      description = "Average delivery, work on timing and confidence.";
+    } else {
+      score = 40;
+      remark = "Needs improvement";
+      description = "Too short or hesitant. Try speaking more freely.";
+    }
+
+    setState(() {
+      _evaluations.insert(
+        0,
+        SpeechEvaluation(
+          date: DateTime.now(),
+          duration: _recordingDuration,
+          score: score,
+          remark: remark,
+          description: description,
+        ),
+      );
+      if (_evaluations.length > 7) _evaluations.removeLast();
     });
   }
 
-  String _formatTime(int seconds) {
-    final m = (seconds ~/ 60).toString().padLeft(2, '0');
-    final s = (seconds % 60).toString().padLeft(2, '0');
-    return '$m:$s';
-  }
-
-  void _showEvaluation(SpeechLog log) {
-    showModalBottomSheet(
+  void _showEvaluationDetail(SpeechEvaluation eval) {
+    showDialog(
       context: context,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
-      builder: (_) {
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            Text('${log.label} - ${log.evaluation.label}',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Text('Topic: ${log.topic}',
-                style: const TextStyle(fontSize: 15, color: Colors.black54)),
+      builder: (_) => AlertDialog(
+        title: Text("${eval.remark} · ${eval.score}/100"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Duration: ${_formatDuration(eval.duration)}"),
             const SizedBox(height: 12),
-            const Text(
-              'Your speech pace was consistent. Try improving clarity and emphasis.',
-              style: TextStyle(fontSize: 14),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
+            Text(eval.description),
+          ],
+        ),
+        actions: [
+          TextButton(
               onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.deepOrange),
-              child: const Text('Close'),
-            )
-          ]),
-        );
-      },
-    );
-  }
-
-  // ---------- UI PARTS ----------
-
-  Widget _buildHeader() {
-    return Positioned(
-      top: 16,
-      left: 12,
-      right: 12,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-            onPressed: () => Navigator.pop(context),
-          ),
-          Row(
-            children: const [
-              Icon(Icons.notifications_none, color: Colors.white),
-              SizedBox(width: 10),
-              CircleAvatar(
-                radius: 18,
-                backgroundImage: AssetImage('assets/avatar_male_medium_casual.png'),
-              )
-            ],
-          )
+              child: const Text("Close"))
         ],
       ),
     );
   }
 
-  Widget _todayCard() {
-    final log = logs.first;
-    final overLimit = elapsedSeconds > maxSeconds;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 6,
-                offset: const Offset(0, 3))
-          ],
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('Today',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 6),
-            Text('Topic : ${log.topic}',
-                style: const TextStyle(fontSize: 15, color: Colors.black87)),
-            const SizedBox(height: 16),
-            Row(children: [
-              GestureDetector(
-                onTap: _toggleRecording,
-                child: AnimatedBuilder(
-                  animation: _blinkController,
-                  builder: (context, _) {
-                    final blink = _blinkController.value;
-                    return Container(
-                      width: 95,
-                      height: 95,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: const LinearGradient(
-                            colors: [Colors.orange, Colors.deepOrange]),
-                        border: Border.all(
-                            color: overLimit
-                                ? Colors.red.withValues(alpha: 0.5 + blink * 0.5)
-                                : Colors.orange.shade900,
-                            width: overLimit ? 4 : 2),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.orange.withValues(alpha: 0.3),
-                              blurRadius: 8,
-                              spreadRadius: 2)
-                        ],
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(isRecording ? Icons.stop : Icons.mic,
-                                color: Colors.white, size: 32),
-                            const SizedBox(height: 5),
-                            Text(
-                              _formatTime(elapsedSeconds),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(width: 18),
-              Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => _showEvaluation(log),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.deepOrange),
-                        child: const Text('Evaluation'),
-                      ),
-                      const SizedBox(height: 10),
-                      LinearProgressIndicator(
-                        value: log.evaluation.progress,
-                        backgroundColor: Colors.grey.shade300,
-                        color: log.evaluation.color,
-                        minHeight: 10,
-                      ),
-                      const SizedBox(height: 4),
-                      Text(log.evaluation.label,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 12)),
-                      if (overLimit)
-                        const Text('Time limit exceeded!',
-                            style: TextStyle(color: Colors.red))
-                    ]),
-              )
-            ])
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _logCard(SpeechLog log) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 6,
-                offset: const Offset(0, 3))
-          ],
-        ),
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(log.label,
-                      style: const TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 18)),
-                  const SizedBox(height: 4),
-                  ElevatedButton(
-                    onPressed: () => _showEvaluation(log),
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepOrange),
-                    child: const Text('Evaluation'),
-                  )
-                ]),
-            Column(
-              children: [
-                Text(
-                  '${log.duration.inMinutes.toString().padLeft(2, '0')}:${(log.duration.inSeconds % 60).toString().padLeft(2, '0')}',
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w600),
-                ),
-                const SizedBox(height: 4),
-                LinearProgressIndicator(
-                  value: log.evaluation.progress,
-                  backgroundColor: Colors.grey.shade300,
-                  color: log.evaluation.color,
-                  minHeight: 8,
-                ),
-                const SizedBox(height: 4),
-                Text(log.evaluation.label,
-                    style: const TextStyle(
-                        fontSize: 12, fontWeight: FontWeight.bold))
-              ],
-            )
-          ],
-        ),
-      ),
-    );
+  Color _colorForRemark(String remark) {
+    switch (remark) {
+      case "Perfect":
+        return Colors.green;
+      case "Good":
+        return Colors.teal;
+      case "Average":
+        return Colors.orange;
+      default:
+        return Colors.redAccent;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.teal[800],
-      body: SafeArea(
-        child: Column(children: [
-          // HEADER SECTION
-          Stack(
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [Color(0xFF0D7C7C), Color(0xFF1A3A5C)],
+          ),
+        ),
+        child: SafeArea(
+          child: Column(
             children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(30),
-                    bottomRight: Radius.circular(30)),
-                child: Image.asset(
-                  'assets/speech_duty_banner.jpg',
-                  height: 300,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+              // ===== MOTSTAR-STYLE HEADER =====
+              Container(
+                width: double.infinity,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Color(0xFF0D7C7C), Color(0xFF1A3A5C)],
+                  ),
+                  border: Border(
+                    bottom:
+                        BorderSide(color: Colors.orangeAccent, width: 2.0),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Back button + title
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(Icons.arrow_back_ios_new_rounded,
+                              color: Colors.white, size: 22),
+                        ),
+                        const SizedBox(width: 6),
+                        const Text(
+                          "SpeechDuty",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    // Notification + Avatar
+                    Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.notifications_none,
+                              color: Colors.white, size: 26),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const NotificationsPage()),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 4),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const ProfilePage()),
+                            );
+                          },
+                          child: const CircleAvatar(
+                            radius: 16,
+                            backgroundImage: AssetImage(
+                                'assets/avatar_male_medium_casual.png'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-              Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                      bottomLeft: Radius.circular(30),
-                      bottomRight: Radius.circular(30)),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black.withValues(alpha: 0.3),
-                      Colors.transparent
+
+              const SizedBox(height: 20),
+
+              // ===== TODAY CARD =====
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.08),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
                     ],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("Today",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 6),
+                      Text(
+                        "Topic : $_topicOfTheDay",
+                        style: const TextStyle(
+                            fontSize: 15, color: Colors.black54),
+                      ),
+                      const SizedBox(height: 14),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: _isRecording
+                                ? _stopRecording
+                                : _startRecording,
+                            child: Container(
+                              width: 78,
+                              height: 78,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _isRecording
+                                    ? (_timeExceeded
+                                        ? Colors.redAccent
+                                        : Colors.orangeAccent)
+                                    : Colors.orange,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.12),
+                                    blurRadius: 8,
+                                  )
+                                ],
+                              ),
+                              child: const Icon(Icons.mic,
+                                  color: Colors.white, size: 36),
+                            ),
+                          ),
+                          const SizedBox(width: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text('Time',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16)),
+                              const SizedBox(height: 6),
+                              Text(
+                                _formatDuration(_recordingDuration),
+                                style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              if (_timeExceeded) ...[
+                                const SizedBox(height: 6),
+                                const Text(
+                                  "⚠ 2 min limit exceeded",
+                                  style: TextStyle(color: Colors.red),
+                                ),
+                              ],
+                            ],
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_evaluations.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text('No evaluation yet. Record first.')),
+                                );
+                              } else {
+                                _showEvaluationDetail(_evaluations.first);
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.orangeAccent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            child: const Text("Evaluate",
+                                style: TextStyle(color: Colors.white)),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-              _buildHeader(),
-              const Positioned(
-                bottom: 50,
-                left: 24,
-                child: Text(
-                  'WARM UP YOUR VOICE\nAND SPEAK CONFIDENT',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      height: 1.2),
-                ),
-              ),
-              const Positioned(
-                bottom: 12,
-                left: 24,
-                child: Text(
-                  'SpeechDuty',
-                  style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+
+              const SizedBox(height: 14),
+
+              // ===== EVALUATION HISTORY =====
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: _evaluations.isEmpty
+                      ? const Center(
+                          child: Text(
+                            'No evaluations yet. Record a speech to see results.',
+                            style: TextStyle(color: Colors.white70),
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : ListView.builder(
+                          itemCount: _evaluations.length,
+                          itemBuilder: (context, index) {
+                            final eval = _evaluations[index];
+                            return _buildEvaluationCard(eval);
+                          },
+                        ),
                 ),
               ),
             ],
           ),
-
-          // CONTENT BELOW
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.teal.shade800, Colors.blue.shade900],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: Column(children: [
-                  _todayCard(),
-                  for (int i = 1; i < logs.length; i++) _logCard(logs[i]),
-                  const SizedBox(height: 40),
-                ]),
-              ),
-            ),
-          ),
-        ]),
+        ),
       ),
     );
   }
+
+  Widget _buildEvaluationCard(SpeechEvaluation eval) {
+    final color = _colorForRemark(eval.remark);
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(DateFormat('dd/MM/yyyy').format(eval.date),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, fontSize: 18)),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  const Icon(Icons.mic, color: Colors.orange),
+                  const SizedBox(width: 6),
+                  Text(_formatDuration(eval.duration),
+                      style: const TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              Text(eval.remark,
+                  style: TextStyle(
+                      color: color, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          const SizedBox(height: 8),
+          LinearProgressIndicator(
+            value: eval.score / 100,
+            color: color,
+            backgroundColor: Colors.grey.shade300,
+            minHeight: 8,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () => _showEvaluationDetail(eval),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orangeAccent,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+            ),
+            child: const Text('Evaluation',
+                style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class SpeechEvaluation {
+  final DateTime date;
+  final Duration duration;
+  final int score;
+  final String remark;
+  final String description;
+
+  SpeechEvaluation({
+    required this.date,
+    required this.duration,
+    required this.score,
+    required this.remark,
+    required this.description,
+  });
 }
