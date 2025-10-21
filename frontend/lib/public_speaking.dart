@@ -34,13 +34,12 @@ class PublicSpeakingPage extends StatelessWidget {
                       bottomRight: Radius.circular(40),
                     ),
                     child: Image.asset(
-                      'assets/public_speaking_banner.jpg', // <-- Replace with your banner image
+                      'assets/public_speaking_banner.jpg',
                       height: 320,
                       width: double.infinity,
                       fit: BoxFit.cover,
                     ),
                   ),
-                  // Overlay gradient for readability
                   Container(
                     height: 320,
                     decoration: BoxDecoration(
@@ -65,24 +64,26 @@ class PublicSpeakingPage extends StatelessWidget {
                     left: 16,
                     child: Builder(
                       builder: (context) => IconButton(
-                        icon: const Icon(Icons.menu, color: Colors.white, size: 28),
+                        icon: const Icon(Icons.menu,
+                            color: Colors.white, size: 28),
                         onPressed: () {
                           Scaffold.of(context).openDrawer();
                         },
                       ),
                     ),
                   ),
-                  
                   Positioned(
                     top: 16,
                     right: 16,
                     child: Row(
                       children: const [
-                        Icon(Icons.notifications_none, color: Colors.white, size: 28),
+                        Icon(Icons.notifications_none,
+                            color: Colors.white, size: 28),
                         SizedBox(width: 8),
                         CircleAvatar(
                           radius: 20,
-                          backgroundImage: AssetImage('assets/avatar_male_medium_casual.png'),
+                          backgroundImage: AssetImage(
+                              'assets/avatar_male_medium_casual.png'),
                         ),
                       ],
                     ),
@@ -124,12 +125,13 @@ class PublicSpeakingPage extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Bronze progress bar (navigates later)
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Bronze progress details coming soon!')),
+                            const SnackBar(
+                                content: Text(
+                                    'Bronze progress details coming soon!')),
                           );
                         },
                         child: Container(
@@ -141,7 +143,8 @@ class PublicSpeakingPage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Row(
                             children: [
-                              const Icon(Icons.emoji_events, color: Colors.brown, size: 28),
+                              const Icon(Icons.emoji_events,
+                                  color: Colors.brown, size: 28),
                               const SizedBox(width: 10),
                               const Text(
                                 'Bronze',
@@ -156,7 +159,7 @@ class PublicSpeakingPage extends StatelessWidget {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: LinearProgressIndicator(
-                                    value: 0.4, // Example progress
+                                    value: 0.4,
                                     color: Colors.orangeAccent,
                                     backgroundColor: Colors.grey.shade300,
                                     minHeight: 8,
@@ -169,11 +172,11 @@ class PublicSpeakingPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    // Leaderboard button
                     GestureDetector(
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Leaderboard coming soon!')),
+                          const SnackBar(
+                              content: Text('Leaderboard coming soon!')),
                         );
                       },
                       child: Container(
@@ -187,7 +190,8 @@ class PublicSpeakingPage extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.bar_chart, color: Color(0xFF1A3A5C)),
+                              Icon(Icons.bar_chart,
+                                  color: Color(0xFF1A3A5C)),
                               SizedBox(width: 8),
                               Text(
                                 'Leaderboard',
@@ -219,9 +223,10 @@ class PublicSpeakingPage extends StatelessWidget {
                       title: 'MOTstar',
                       color: Colors.yellow.shade700,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const MOTstarPage()),
+                        // --- FIXED NAVIGATION ---
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => const MOTstarPage()),
                         );
                       },
                     ),
@@ -230,10 +235,11 @@ class PublicSpeakingPage extends StatelessWidget {
                       title: 'SpeechDuty',
                       color: Colors.greenAccent.shade400,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (_) => const SpeechDutyPage()),
-                        ); 
+                        // --- FIXED NAVIGATION ---
+                        Navigator.of(context, rootNavigator: true).push(
+                          MaterialPageRoute(
+                              builder: (context) => const SpeechDutyPage()),
+                        );
                       },
                     ),
                     _buildFeatureCard(
@@ -242,7 +248,8 @@ class PublicSpeakingPage extends StatelessWidget {
                       color: Colors.purpleAccent.shade700,
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('VozHut feature coming soon!')),
+                          const SnackBar(
+                              content: Text('VozHut feature coming soon!')),
                         );
                       },
                     ),
@@ -252,7 +259,8 @@ class PublicSpeakingPage extends StatelessWidget {
                       color: Colors.blueAccent,
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('AI Audience coming soon!')),
+                          const SnackBar(
+                              content: Text('AI Audience coming soon!')),
                         );
                       },
                     ),
@@ -262,7 +270,8 @@ class PublicSpeakingPage extends StatelessWidget {
                       color: Colors.orangeAccent,
                       onTap: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('ScriptSharp coming soon!')),
+                          const SnackBar(
+                              content: Text('ScriptSharp coming soon!')),
                         );
                       },
                     ),
@@ -274,14 +283,16 @@ class PublicSpeakingPage extends StatelessWidget {
 
               // ====== LEVEL UP BUTTON ======
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 20),
                 child: SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Level Up feature coming soon!')),
+                        const SnackBar(
+                            content: Text('Level Up feature coming soon!')),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -313,10 +324,12 @@ class PublicSpeakingPage extends StatelessWidget {
     required IconData icon,
     required String title,
     required Color color,
-    VoidCallback? onTap, // Added onTap support
+    VoidCallback? onTap,
   }) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(20),
+      splashColor: color.withValues(alpha: 0.3),
       child: Container(
         width: 100,
         margin: const EdgeInsets.only(right: 16),
