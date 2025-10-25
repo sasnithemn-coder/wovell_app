@@ -9,15 +9,16 @@ class AvatarPage extends StatefulWidget {
 }
 
 class _AvatarPageState extends State<AvatarPage> {
-  // Avatar customization state
-  String selectedOutfit = 'casual';
-  String selectedSkin = 'medium';
-  String selectedAccessory = 'none';
+  // Selected gender (default: male)
   String selectedGender = 'male';
 
-  // You can replace these image paths with your actual asset paths
+  // Get the avatar image based on selected gender
   String getAvatarImage() {
-    return 'assets/avatar_$selectedGender$selectedSkin$selectedOutfit.png';
+    if (selectedGender == 'male') {
+      return 'assets/male_avatar.png'; // replace with your actual asset path
+    } else {
+      return 'assets/female_avatar.png'; // replace with your actual asset path
+    }
   }
 
   @override
@@ -31,118 +32,121 @@ class _AvatarPageState extends State<AvatarPage> {
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
             colors: [
-              Color(0xFF0D7C7C), // teal
-              Color(0xFF1A3A5C), // dark blue
+              Color(0xFF008080),
+              Color(0xFF003366),
             ],
           ),
         ),
         child: SafeArea(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top bar
+              // Back and Title
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                 child: Row(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
-                      onPressed: () => Navigator.pop(context),
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
                     const Text(
-                      "Select your\nAvatar",
+                      'Select your\nAvatar',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        height: 1.1,
+                        height: 1.2,
                       ),
                     ),
                   ],
                 ),
               ),
 
-              // Avatar display
-              Expanded(
-                child: Center(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: Image.asset(
-                      getAvatarImage(),
-                      key: ValueKey(getAvatarImage()),
-                      height: 350,
-                      fit: BoxFit.contain,
-                    ),
+              const Spacer(),
+
+              // Avatar Image Preview
+              Center(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: Image.asset(
+                    getAvatarImage(),
+                    key: ValueKey<String>(selectedGender),
+                    width: 280,
+                    height: 380,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
 
-              // Customization options
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-                child: Column(
+              const Spacer(),
+
+              // Gender Selection Buttons
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildOptionRow(
-                      label: 'Skin Tone',
-                      options: ['light', 'medium', 'dark'],
-                      selected: selectedSkin,
-                      onChanged: (value) {
-                        setState(() => selectedSkin = value);
+                    GenderButton(
+                      label: 'Male',
+                      isSelected: selectedGender == 'male',
+                      onTap: () {
+                        setState(() {
+                          selectedGender = 'male';
+                        });
                       },
                     ),
-                    const SizedBox(height: 12),
-                    _buildOptionRow(
-                      label: 'Outfit',
-                      options: ['casual', 'formal', 'sport'],
-                      selected: selectedOutfit,
-                      onChanged: (value) {
-                        setState(() => selectedOutfit = value);
+                    const SizedBox(width: 20),
+                    GenderButton(
+                      label: 'Female',
+                      isSelected: selectedGender == 'female',
+                      onTap: () {
+                        setState(() {
+                          selectedGender = 'female';
+                        });
                       },
-                    ),
-                    const SizedBox(height: 12),
-                    _buildOptionRow(
-                      label: 'Accessory',
-                      options: ['none', 'glasses', 'hat'],
-                      selected: selectedAccessory,
-                      onChanged: (value) {
-                        setState(() => selectedAccessory = value);
-                      },
-                    ),
-                    const SizedBox(height: 24),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const MainHomePage()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFF8C42),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                        ),
-                        child: const Text(
-                          'Select',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
                     ),
                   ],
+                ),
+              ),
+
+              const SizedBox(height: 30),
+
+              // Select Button
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 40),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 100,
+                        vertical: 14,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      backgroundColor: const Color(0xFFFF7B00),
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MainHomePage()),
+                      );
+                    },
+                    child: const Text(
+                      'Select',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -151,50 +155,44 @@ class _AvatarPageState extends State<AvatarPage> {
       ),
     );
   }
+}
 
-  // Reusable option builder
-  Widget _buildOptionRow({
-    required String label,
-    required List<String> options,
-    required String selected,
-    required Function(String) onChanged,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
+class GenderButton extends StatelessWidget {
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const GenderButton({
+    super.key,
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xFFFF7B00) : Colors.transparent,
+          border: Border.all(
+            color: isSelected ? const Color(0xFFFF7B00) : Colors.white,
+            width: 2,
+          ),
+          borderRadius: BorderRadius.circular(25),
+        ),
+        child: Text(
           label,
-          style: const TextStyle(
-            color: Color(0xFF1A3A5C),
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           ),
         ),
-        const SizedBox(height: 8),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: options.map((option) {
-            bool isSelected = option == selected;
-            return GestureDetector(
-              onTap: () => onChanged(option),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-                decoration: BoxDecoration(
-                  color: isSelected ? const Color(0xFF0D7C7C) : Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  option[0].toUpperCase() + option.substring(1),
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
+      ),
     );
   }
 }

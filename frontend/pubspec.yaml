@@ -96,6 +96,11 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
-    - assets/
+    - assets/male_avatar.png
+    - assets/female_avatar.png
+    - assets/public_speaking.jpg
+    - assets/interview_skills.jpg
+    - assets/dressing_sense.jpg
+    - assets/ethics_etiquette.jpg
 
   
