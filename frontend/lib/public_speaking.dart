@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wovell_app/scriptsharp.dart';
 import 'widgets/side_menu.dart';
 import 'motstar_page.dart';
 import 'speech_duty_page.dart';
@@ -269,9 +270,10 @@ class PublicSpeakingPage extends StatelessWidget {
                       title: 'ScriptSharp',
                       color: Colors.orangeAccent,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('ScriptSharp coming soon!')),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ScriptSharpPage()),
                         );
                       },
                     ),
