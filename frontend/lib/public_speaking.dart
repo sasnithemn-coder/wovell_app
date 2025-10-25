@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wovell_app/scriptsharp.dart';
+import 'package:wovell_app/voz_hut.dart';
 import 'widgets/side_menu.dart';
 import 'motstar_page.dart';
 import 'speech_duty_page.dart';
@@ -248,10 +249,11 @@ class PublicSpeakingPage extends StatelessWidget {
                       title: 'VozHut',
                       color: Colors.purpleAccent.shade700,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('VozHut feature coming soon!')),
-                        );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const VozHutPage()),
+                        );      
                       },
                     ),
                     _buildFeatureCard(
