@@ -40,6 +40,7 @@ dependencies:
   speech_to_text: ^6.4.1
   http: ^1.2.1
   just_audio: ^0.9.39
+  flutter_screenutil: ^5.9.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -109,5 +110,7 @@ flutter:
     - assets/public_speaking_banner.jpg
     - assets/voz_hut_banner.png
     - assets/speech_duty_banner.png
+    - assets/b31d5472-09aa-4349-a81d-3ac90220f0d9.jpg
+    - assets/15bdd0c5-17cb-46df-8a82-f52a980232fc.jpg
 
   

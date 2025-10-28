@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wovell_app/ai_audience_page.dart';
 import 'package:wovell_app/scriptsharp.dart';
 import 'package:wovell_app/voz_hut.dart';
 import 'widgets/side_menu.dart';
@@ -261,9 +262,10 @@ class PublicSpeakingPage extends StatelessWidget {
                       title: 'AI Audience',
                       color: Colors.blueAccent,
                       onTap: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text('AI Audience coming soon!')),
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AiAudiencePage()),
                         );
                       },
                     ),
