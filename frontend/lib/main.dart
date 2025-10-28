@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'signin.dart';
+import 'package:provider/provider.dart';
+import 'models/user_progress.dart';
+import 'landing.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
-  runApp(const WovellApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => UserProgress(),
+      child: const WovellApp(),
+    ),
+  );
 }
 
 class WovellApp extends StatelessWidget {
@@ -13,20 +19,21 @@ class WovellApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(414, 896), // iPhone 11 base
+      designSize: const Size(375, 812), // ✅ iPhone 11 design reference
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        // You can still access ScreenUtil here if needed, e.g. ScreenUtil().screenWidth
         return MaterialApp(
-          debugShowCheckedModeBanner: false,
           title: 'Wovell',
+          debugShowCheckedModeBanner: false,
           theme: ThemeData(
-            useMaterial3: true,
+            primarySwatch: Colors.teal,
+            fontFamily: 'Roboto',
           ),
-          home: const SignInScreen(),
+          home: child,
         );
       },
+      child: const SplashScreen(), // ensure this is initialized properly
     );
   }
 }
