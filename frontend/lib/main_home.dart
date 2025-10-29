@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'public_speaking.dart';
 import 'widgets/side_menu.dart';
 import 'interview_skills.dart';
+import 'ethics_etiquettes.dart';
+import 'dressing_sense.dart';
 
 class MainHomePage extends StatelessWidget {
   const MainHomePage({super.key});
@@ -107,13 +109,23 @@ class MainHomePage extends StatelessWidget {
                 _buildSkillCard(
                   image: 'assets/ethics_etiquette.jpg',
                   title: 'Ethics & Etiquette',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const EthicsEtiquettesPage()),
+                    );
+                  },
                 ),
                 const SizedBox(height: 20),
                 _buildSkillCard(
                   image: 'assets/dressing_sense.jpg',
                   title: 'Dressing Sense',
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const DressingSensePage()),
+                    );
+                  },
                 ),
               ],
             ),

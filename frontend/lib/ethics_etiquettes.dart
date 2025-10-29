@@ -3,15 +3,15 @@ import 'notifications.dart';
 import 'profile_page.dart';
 import 'level_up_page.dart';
 
-class InterviewSkillsPage extends StatelessWidget {
-  const InterviewSkillsPage({super.key});
+class EthicsEtiquettesPage extends StatelessWidget {
+  const EthicsEtiquettesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // Gradient background
+          // Background gradient
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -22,15 +22,15 @@ class InterviewSkillsPage extends StatelessWidget {
             ),
           ),
 
-          // Background image
+          // Top background image
           Image.asset(
-            'assets/3fc84ffa-73ac-41f9-884b-2f4351b02513.jpg',
+            'assets/6be12f30-77ad-4317-b1bc-b8c1fce3d3cb.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           ),
 
-          // Overlay color for clarity
+          // Overlay for visibility
           Container(color: Colors.black.withValues(alpha: 0.35)),
 
           // Main content
@@ -75,7 +75,7 @@ class InterviewSkillsPage extends StatelessWidget {
                       ),
                       const SizedBox(width: 12),
 
-                      // Profile icon
+                      // Profile button
                       GestureDetector(
                         onTap: () {
                           Navigator.push(context,
@@ -97,20 +97,23 @@ class InterviewSkillsPage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
-                  "Interview Skills",
+                  "Ethics &\nEtiquette",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 26,
+                    fontSize: 30,
                     fontWeight: FontWeight.bold,
+                    height: 1.1,
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
 
+              const SizedBox(height: 10),
+
+              // Subtitle
               const Padding(
                 padding: EdgeInsets.only(left: 20),
                 child: Text(
-                  "Get ready to impress at every opportunity!",
+                  "Learn the right way to act in every situation",
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 16,
@@ -121,7 +124,7 @@ class InterviewSkillsPage extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              // Leaderboard & Bronze Progress Row
+              // Leaderboard and Bronze Row
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
@@ -212,7 +215,7 @@ class InterviewSkillsPage extends StatelessWidget {
                 ),
               ),
 
-              // Horizontal scrollable special features
+              // Scrollable feature list
               SizedBox(
                 height: 120,
                 child: ListView(
@@ -220,30 +223,30 @@ class InterviewSkillsPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   children: const [
                     _FeatureCard(
-                      title: "Mock Room",
-                      icon: Icons.meeting_room,
+                      title: "Scenario-Based Learning",
+                      icon: Icons.school,
+                      color: Colors.grey,
+                    ),
+                    _FeatureCard(
+                      title: "Politeness Meter",
+                      icon: Icons.speed,
+                      color: Colors.orange,
+                    ),
+                    _FeatureCard(
+                      title: "Common Mistake Quiz",
+                      icon: Icons.help_outline,
+                      color: Colors.black,
+                    ),
+                    _FeatureCard(
+                      title: "AR Etiquette Simulator",
+                      icon: Icons.face_retouching_natural,
                       color: Colors.green,
                     ),
                     _FeatureCard(
-                      title: "Answer Helper",
-                      icon: Icons.build,
-                      color: Colors.purple,
-                    ),
-                    _FeatureCard(
-                      title: "Situational Quiz",
-                      icon: Icons.quiz,
-                      color: Colors.redAccent,
-                    ),
-                    _FeatureCard(
-                      title: "CV Analyzer",
-                      icon: Icons.description,
-                      color: Colors.yellow,
+                      title: "Daily Etiquette Tips",
+                      icon: Icons.lightbulb_outline,
+                      color: Colors.amber,
                       textColor: Colors.black,
-                    ),
-                    _FeatureCard(
-                      title: "Body Language",
-                      icon: Icons.person,
-                      color: Colors.blueAccent,
                     ),
                   ],
                 ),
@@ -251,20 +254,19 @@ class InterviewSkillsPage extends StatelessWidget {
 
               const Spacer(),
 
-              // Bottom illustration image and Level Up button
+              // Bottom image with Level Up button
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
-                    image: AssetImage(
-                        'assets/5e3c022d-42b3-45f6-96de-af9134290402.jpg'),
+                    image: AssetImage('assets/2bfa6cac-d189-4ded-a6e9-37c12c40c745.jpg'),
                     fit: BoxFit.cover,
                     alignment: Alignment.bottomCenter,
                   ),
                 ),
                 child: Container(
-                  color: Colors.white.withValues(alpha: 0.15),
-                  padding: const EdgeInsets.only(bottom: 30, top: 30),
+                  color: Colors.white.withValues(alpha: 0.1),
+                  padding: const EdgeInsets.symmetric(vertical: 30),
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () {
@@ -301,9 +303,9 @@ class InterviewSkillsPage extends StatelessWidget {
   }
 }
 
-// ----------------------------------------------------
-// Feature Card Widget
-// ----------------------------------------------------
+// ----------------------------------------------
+// Reusable Special Feature Card Widget
+// ----------------------------------------------
 class _FeatureCard extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -320,7 +322,7 @@ class _FeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 130,
+      width: 150,
       margin: const EdgeInsets.only(right: 14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -344,7 +346,7 @@ class _FeatureCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 14,
+              fontSize: 13,
               color: textColor ?? color,
             ),
           ),

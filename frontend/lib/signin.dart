@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'signup.dart';
 import 'main_home.dart';
 
@@ -29,6 +28,7 @@ class _SignInScreenState extends State<SignInScreen> {
       return;
     }
 
+    // Navigate to Home
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const MainHomePage()),
@@ -36,6 +36,7 @@ class _SignInScreenState extends State<SignInScreen> {
   }
 
   bool _isValidEmail(String email) {
+    // ✅ Fixed valid RegExp syntax
     return RegExp(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
@@ -49,11 +50,11 @@ class _SignInScreenState extends State<SignInScreen> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 56.w,
-        height: 56.w,
+        width: 56,
+        height: 56,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(color: Colors.grey.shade300),
         ),
         child: Center(
@@ -61,9 +62,10 @@ class _SignInScreenState extends State<SignInScreen> {
             assetPath.contains('facebook')
                 ? Icons.facebook
                 : Icons.g_mobiledata,
-            size: 32.sp,
-            color:
-                assetPath.contains('facebook') ? Colors.blue : Colors.red,
+            size: 32,
+            color: assetPath.contains('facebook')
+                ? Colors.blue
+                : Colors.red,
           ),
         ),
       ),
@@ -73,7 +75,6 @@ class _SignInScreenState extends State<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true, // prevents keyboard overflow
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -87,47 +88,47 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start, 
               children: [
-                SizedBox(height: 60.h),
-                Text(
+                const SizedBox(height: 60),
+                const Text(
                   'Hello',
                   style: TextStyle(
-                    fontSize: 48.sp,
+                    fontSize: 48,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                Text(
+                const Text(
                   'Sign in!',
                   style: TextStyle(
-                    fontSize: 48.sp,
+                    fontSize: 48,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 40.h),
+                const SizedBox(height: 40),
                 Container(
-                  padding: EdgeInsets.all(24.w),
+                  padding: const EdgeInsets.all(24),
                   decoration: BoxDecoration(
                     color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(30.r),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start, 
                     children: [
-                      Text(
+                      const Text(
                         'Email',
+                        textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A3A5C),
+                          color: Color(0xFF1A3A5C),
                         ),
                       ),
-                      SizedBox(height: 8.h),
+                      const SizedBox(height: 8),
                       TextField(
                         controller: _emailController,
                         decoration: const InputDecoration(
@@ -140,23 +141,23 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                         keyboardType: TextInputType.emailAddress,
                       ),
-                      SizedBox(height: 24.h),
-                      Text(
+                      const SizedBox(height: 24),
+                      const Text(
                         'Password',
+                        textAlign: TextAlign.left,
                         style: TextStyle(
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A3A5C),
+                          color: Color(0xFF1A3A5C),
                         ),
                       ),
-                      SizedBox(height: 8.h),
+                      const SizedBox(height: 8),
                       TextField(
                         controller: _passwordController,
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           hintText: 'Enter your password',
-                          hintStyle:
-                              const TextStyle(color: Colors.grey),
+                          hintStyle: const TextStyle(color: Colors.grey),
                           border: const UnderlineInputBorder(),
                           enabledBorder: const UnderlineInputBorder(
                             borderSide: BorderSide(color: Colors.grey),
@@ -176,100 +177,91 @@ class _SignInScreenState extends State<SignInScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.h),
+                      const SizedBox(height: 16),
                       Align(
                         alignment: Alignment.centerRight,
                         child: TextButton(
                           onPressed: () {
-                            _showMessage(
-                                'Forgot password feature coming soon!');
+                            _showMessage('Forgot password feature coming soon!');
                           },
-                          child: Text(
+                          child: const Text(
                             'Forgot password?',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
-                              fontSize: 14.sp,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.h),
+                      const SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
-                        height: 56.h,
+                        height: 56,
                         child: ElevatedButton(
                           onPressed: _signIn,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFF8C42),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(28.r),
+                              borderRadius: BorderRadius.circular(28),
                             ),
                           ),
-                          child: Text(
+                          child: const Text(
                             'SIGN IN',
                             style: TextStyle(
-                              fontSize: 18.sp,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
                         ),
                       ),
-                      SizedBox(height: 24.h),
-                      Center(
+                      const SizedBox(height: 24),
+                      const Center(
                         child: Text(
                           'or',
                           style: TextStyle(
-                            fontSize: 16.sp,
+                            fontSize: 16,
                             color: Colors.black,
                           ),
                         ),
                       ),
-                      SizedBox(height: 16.h),
+                      const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           _socialButton(
                             'assets/facebook.png',
-                            () => _showMessage(
-                                'Facebook login coming soon!'),
+                            () => _showMessage('Facebook login coming soon!'),
                           ),
-                          SizedBox(width: 24.w),
+                          const SizedBox(width: 24),
                           _socialButton(
                             'assets/google.png',
-                            () => _showMessage(
-                                'Google login coming soon!'),
+                            () => _showMessage('Google login coming soon!'),
                           ),
                         ],
                       ),
-                      SizedBox(height: 24.h),
+                      const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             "Don't have an account?",
-                            style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 14.sp,
-                            ),
+                            style: TextStyle(color: Colors.black87),
                           ),
                           TextButton(
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      const SignUpScreen(),
+                                  builder: (context) => const SignUpScreen(),
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               'Sign up',
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
-                                fontSize: 14.sp,
                               ),
                             ),
                           ),
@@ -278,7 +270,6 @@ class _SignInScreenState extends State<SignInScreen> {
                     ],
                   ),
                 ),
-                SizedBox(height: 30.h),
               ],
             ),
           ),

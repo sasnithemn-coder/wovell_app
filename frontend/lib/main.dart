@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'models/user_progress.dart';
-import 'landing.dart';
+import 'landing.dart'; // keep your existing landing import (eg SplashScreen)
 
 void main() {
   runApp(
@@ -18,22 +17,14 @@ class WovellApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812), // ✅ iPhone 11 design reference
-      minTextAdapt: true,
-      splitScreenMode: true,
-      builder: (context, child) {
-        return MaterialApp(
-          title: 'Wovell',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primarySwatch: Colors.teal,
-            fontFamily: 'Roboto',
-          ),
-          home: child,
-        );
-      },
-      child: const SplashScreen(), // ensure this is initialized properly
+    return MaterialApp(
+      title: 'Wovell',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Colors.teal,
+        fontFamily: 'Roboto',
+      ),
+      home: const SplashScreen(), // ensure SplashScreen is defined in landing.dart
     );
   }
 }
