@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'home.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -23,7 +24,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final password = _passwordController.text.trim();
     final confirmPassword = _confirmPasswordController.text.trim();
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty || confirmPassword.isEmpty) {
+    if (name.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty ||
+        confirmPassword.isEmpty) {
       _showMessage('Please fill in all fields');
       return;
     }
@@ -53,77 +57,131 @@ class _SignUpScreenState extends State<SignUpScreen> {
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
 
   void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false, // prevents keyboard overflow
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
-            colors: [Color(0xFF0D7C7C), Color(0xFF1A3A5C)],
+            colors: [
+              Color(0xFF0D7C7C),
+              Color(0xFF1A3A5C),
+            ],
           ),
         ),
         child: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 40),
-                const Text(
-                  'Create Your',
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                const Text(
-                  'Account',
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.white),
-                ),
-                const SizedBox(height: 30),
-                Container(
-                  padding: const EdgeInsets.all(24),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 22.w),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: 400.w),
+                child: SingleChildScrollView(
+                  // Allows small devices to scroll slightly if needed
+                  physics: const BouncingScrollPhysics(),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildTextField('Name', 'Enter your name', _nameController),
-                      const SizedBox(height: 20),
-                      _buildTextField('Email', 'Enter a valid email', _emailController, isEmail: true),
-                      const SizedBox(height: 20),
-                      _buildPasswordField('Password', 'Enter password', _passwordController, _obscurePassword, () {
-                        setState(() => _obscurePassword = !_obscurePassword);
-                      }),
-                      const SizedBox(height: 20),
-                      _buildPasswordField('Confirm Password', 'Re-enter password', _confirmPasswordController, _obscureConfirmPassword, () {
-                        setState(() => _obscureConfirmPassword = !_obscureConfirmPassword);
-                      }),
-                      const SizedBox(height: 32),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: ElevatedButton(
-                          onPressed: _signUp,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFF8C42),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(28),
-                            ),
-                          ),
-                          child: const Text(
-                            'SIGN UP',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                      SizedBox(height: 40.h),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Create Your',
+                          style: TextStyle(
+                            fontSize: 42.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
                           ),
                         ),
                       ),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Account',
+                          style: TextStyle(
+                            fontSize: 42.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 30.h),
+                      Container(
+                        padding: EdgeInsets.all(22.w),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.circular(28.r),
+                        ),
+                        child: Column(
+                          children: [
+                            _buildTextField(
+                              'Name',
+                              'Enter your name',
+                              _nameController,
+                            ),
+                            SizedBox(height: 18.h),
+                            _buildTextField(
+                              'Email',
+                              'Enter a valid email',
+                              _emailController,
+                              isEmail: true,
+                            ),
+                            SizedBox(height: 18.h),
+                            _buildPasswordField(
+                              'Password',
+                              'Enter password',
+                              _passwordController,
+                              _obscurePassword,
+                              () => setState(() =>
+                                  _obscurePassword = !_obscurePassword),
+                            ),
+                            SizedBox(height: 18.h),
+                            _buildPasswordField(
+                              'Confirm Password',
+                              'Re-enter password',
+                              _confirmPasswordController,
+                              _obscureConfirmPassword,
+                              () => setState(() => _obscureConfirmPassword =
+                                  !_obscureConfirmPassword),
+                            ),
+                            SizedBox(height: 28.h),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 52.h,
+                              child: ElevatedButton(
+                                onPressed: _signUp,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFF8C42),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(26.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  'SIGN UP',
+                                  style: TextStyle(
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
                     ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),
@@ -131,18 +189,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildTextField(String label, String hint, TextEditingController controller, {bool isEmail = false}) {
+  Widget _buildTextField(
+      String label, String hint, TextEditingController controller,
+      {bool isEmail = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1A3A5C))),
-        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF1A3A5C),
+          ),
+        ),
+        SizedBox(height: 6.h),
         TextField(
           controller: controller,
-          keyboardType: isEmail ? TextInputType.emailAddress : TextInputType.text,
+          keyboardType:
+              isEmail ? TextInputType.emailAddress : TextInputType.text,
           decoration: InputDecoration(
             hintText: hint,
+            hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
             border: const UnderlineInputBorder(),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
           ),
         ),
       ],
@@ -150,20 +222,40 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildPasswordField(
-      String label, String hint, TextEditingController controller, bool obscure, VoidCallback toggle) {
+    String label,
+    String hint,
+    TextEditingController controller,
+    bool obscure,
+    VoidCallback toggle,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF1A3A5C))),
-        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF1A3A5C),
+          ),
+        ),
+        SizedBox(height: 6.h),
         TextField(
           controller: controller,
           obscureText: obscure,
           decoration: InputDecoration(
             hintText: hint,
+            hintStyle: TextStyle(fontSize: 13.sp, color: Colors.grey),
             border: const UnderlineInputBorder(),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.grey),
+            ),
             suffixIcon: IconButton(
-              icon: Icon(obscure ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
+              icon: Icon(
+                obscure ? Icons.visibility_off : Icons.visibility,
+                color: Colors.grey,
+                size: 20.sp,
+              ),
               onPressed: toggle,
             ),
           ),

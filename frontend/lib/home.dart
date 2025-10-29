@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'avatar.dart'; 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'avatar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -43,30 +44,30 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32.w),
                 child: Text(
                   'You have\nSuccessfully\nCreated your\nAccount',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 28,
+                    fontSize: 28.sp,
                     fontWeight: FontWeight.w500,
                     height: 1.3,
                   ),
                 ),
               ),
-              const SizedBox(height: 60),
+              SizedBox(height: 60.h),
 
               // ✅ Custom thin checkmark icon
               const CustomCheckIcon(),
 
-              const SizedBox(height: 40),
-              const Text(
+              SizedBox(height: 40.h),
+              Text(
                 'Redirecting...',
                 style: TextStyle(
                   color: Colors.white70,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
             ],
@@ -83,7 +84,7 @@ class CustomCheckIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(120, 120), // Size of the whole circle
+      size: Size(120.w, 120.w), // ✅ Responsive circle size
       painter: CheckPainter(),
     );
   }
@@ -95,18 +96,18 @@ class CheckPainter extends CustomPainter {
     final Paint circlePaint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.5; 
+      ..strokeWidth = 3.5.w; // ✅ Responsive stroke
 
     final Paint checkPaint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.5 
+      ..strokeWidth = 3.5.w
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
     // Draw outer circle
     final Offset center = Offset(size.width / 2, size.height / 2);
-    const double radius = 55;
+    final double radius = 55.w; // ✅ Responsive radius
     canvas.drawCircle(center, radius, circlePaint);
 
     // Draw checkmark
