@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wovell_app/ai_audience_page.dart';
 import 'package:wovell_app/level_up_page.dart';
 import 'package:wovell_app/scriptsharp.dart';
@@ -30,7 +31,7 @@ class PublicSpeakingPage extends StatelessWidget {
             ),
           ),
 
-          // Top image
+          // Background image overlay
           Image.asset(
             'assets/994c8127-2b6d-42b5-999b-e87a32286e7d.jpg',
             fit: BoxFit.cover,
@@ -39,34 +40,35 @@ class PublicSpeakingPage extends StatelessWidget {
           ),
           Container(color: Colors.black.withValues(alpha: 0.35)),
 
-          // Page content
+          // Main content
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // ====== TOP NAV BAR ======
               SafeArea(
                 child: Padding(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   child: Row(
                     children: [
-                      // Drawer / Back Button
+                      // Drawer Menu Button
                       Builder(
                         builder: (context) => GestureDetector(
                           onTap: () => Scaffold.of(context).openDrawer(),
                           child: Container(
-                            padding: const EdgeInsets.all(6),
+                            padding: EdgeInsets.all(6.w),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.15),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.menu,
-                                color: Colors.white, size: 24),
+                            child: Icon(Icons.menu,
+                                color: Colors.white, size: 24.sp),
                           ),
                         ),
                       ),
                       const Spacer(),
 
-                      // Notification
+                      // Notifications
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -76,16 +78,16 @@ class PublicSpeakingPage extends StatelessWidget {
                           );
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: EdgeInsets.all(8.w),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.notifications_none,
-                              color: Colors.white, size: 22),
+                          child: Icon(Icons.notifications_none,
+                              color: Colors.white, size: 22.sp),
                         ),
                       ),
-                      const SizedBox(width: 12),
+                      SizedBox(width: 12.w),
 
                       // Profile
                       GestureDetector(
@@ -96,9 +98,9 @@ class PublicSpeakingPage extends StatelessWidget {
                                 builder: (_) => const ProfilePage()),
                           );
                         },
-                        child: const CircleAvatar(
-                          radius: 18,
-                          backgroundImage: AssetImage(
+                        child: CircleAvatar(
+                          radius: 18.r,
+                          backgroundImage: const AssetImage(
                               'assets/avatar_male_medium_casual.png'),
                         ),
                       ),
@@ -107,42 +109,42 @@ class PublicSpeakingPage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
 
-              // Title
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
+              // ====== TITLE ======
+              Padding(
+                padding: EdgeInsets.only(left: 20.w),
                 child: Text(
                   "Public\nSpeaking",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 30,
+                    fontSize: 30.sp,
                     fontWeight: FontWeight.bold,
                     height: 1.1,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 10),
+              SizedBox(height: 10.h),
 
-              // Subtitle
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
+              // ====== SUBTITLE ======
+              Padding(
+                padding: EdgeInsets.only(left: 20.w),
                 child: Text(
                   "Master your voice and stage presence!",
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     height: 1.3,
                   ),
                 ),
               ),
 
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
 
-              // Leaderboard and Bronze Row
+              // ====== BRONZE + LEADERBOARD ROW ======
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
                     Expanded(
@@ -150,40 +152,41 @@ class PublicSpeakingPage extends StatelessWidget {
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content:
-                                    Text('Bronze progress details coming soon!')),
+                              content: Text(
+                                  'Bronze progress details coming soon!'),
+                            ),
                           );
                         },
                         child: Container(
-                          height: 60,
+                          height: 60.h,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(15.r),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.emoji_events,
-                                  color: Colors.amber, size: 24),
-                              const SizedBox(width: 8),
+                              Icon(Icons.emoji_events,
+                                  color: Colors.amber, size: 24.sp),
+                              SizedBox(width: 8.w),
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  const Text(
+                                  Text(
                                     "Bronze",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 16.sp,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
                                   Container(
-                                    width: 100,
-                                    height: 6,
-                                    margin: const EdgeInsets.only(top: 4),
+                                    width: 100.w,
+                                    height: 6.h,
+                                    margin: EdgeInsets.only(top: 4.h),
                                     decoration: BoxDecoration(
                                       color: Colors.white.withValues(alpha: 0.2),
-                                      borderRadius: BorderRadius.circular(3),
+                                      borderRadius: BorderRadius.circular(3.r),
                                     ),
                                     child: FractionallySizedBox(
                                       alignment: Alignment.centerLeft,
@@ -191,7 +194,8 @@ class PublicSpeakingPage extends StatelessWidget {
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.orangeAccent,
-                                          borderRadius: BorderRadius.circular(3),
+                                          borderRadius:
+                                              BorderRadius.circular(3.r),
                                         ),
                                       ),
                                     ),
@@ -203,34 +207,35 @@ class PublicSpeakingPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                                content:
-                                    Text('Leaderboard feature coming soon!')),
+                              content:
+                                  Text('Leaderboard feature coming soon!'),
+                            ),
                           );
                         },
                         child: Container(
-                          height: 60,
+                          height: 60.h,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(15.r),
                           ),
-                          child: const Center(
+                          child: Center(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(Icons.leaderboard,
-                                    color: Colors.white, size: 22),
-                                SizedBox(width: 8),
+                                    color: Colors.white, size: 22.sp),
+                                SizedBox(width: 8.w),
                                 Text(
                                   "Leaderboard",
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 16,
+                                    fontSize: 16.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -244,27 +249,27 @@ class PublicSpeakingPage extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 25),
+              SizedBox(height: 25.h),
 
-              // Special Features Title
-              const Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 10),
+              // ====== SPECIAL FEATURES TITLE ======
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
                 child: Text(
                   "Special Features",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
 
-              // Scrollable Features with Navigation Logic
+              // ====== HORIZONTAL FEATURE SCROLL ======
               SizedBox(
-                height: 120,
+                height: 120.h,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                   children: [
                     _FeatureCard(
                       title: "MOTstar",
@@ -330,7 +335,7 @@ class PublicSpeakingPage extends StatelessWidget {
 
               const Spacer(),
 
-              // Bottom image and Level Up button
+              // ====== BOTTOM IMAGE + LEVEL UP BUTTON ======
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -343,7 +348,7 @@ class PublicSpeakingPage extends StatelessWidget {
                 ),
                 child: Container(
                   color: Colors.white.withValues(alpha: 0.1),
-                  padding: const EdgeInsets.symmetric(vertical: 30),
+                  padding: EdgeInsets.symmetric(vertical: 30.h),
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () {
@@ -355,17 +360,19 @@ class PublicSpeakingPage extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFF7A00),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 80, vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 80.w,
+                          vertical: 14.h,
+                        ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(30.r),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Level Up",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -382,7 +389,7 @@ class PublicSpeakingPage extends StatelessWidget {
 }
 
 // ----------------------------------------------------
-// Feature Card Widget with Working Navigation
+// Feature Card Widget
 // ----------------------------------------------------
 class _FeatureCard extends StatelessWidget {
   final String title;
@@ -401,34 +408,34 @@ class _FeatureCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(15),
+      borderRadius: BorderRadius.circular(15.r),
       splashColor: color.withValues(alpha: 0.3),
       child: Container(
-        width: 130,
-        margin: const EdgeInsets.only(right: 14),
+        width: 130.w,
+        margin: EdgeInsets.only(right: 14.w),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
-          border: Border.all(color: color, width: 2),
+          borderRadius: BorderRadius.circular(15.r),
+          border: Border.all(color: color, width: 2.w),
           boxShadow: [
             BoxShadow(
               color: color.withValues(alpha: 0.2),
-              blurRadius: 10,
-              offset: const Offset(0, 6),
+              blurRadius: 10.r,
+              offset: Offset(0, 6.h),
             )
           ],
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: color, size: 30),
-            const SizedBox(height: 8),
+            Icon(icon, color: color, size: 30.sp),
+            SizedBox(height: 8.h),
             Text(
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                fontSize: 13,
+                fontSize: 13.sp,
                 color: color,
               ),
             ),

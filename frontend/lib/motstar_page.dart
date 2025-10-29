@@ -1,10 +1,10 @@
-// lib/motstar_page.dart
 import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_page.dart';
-import 'notifications.dart'; // create a placeholder if not yet added
+import 'notifications.dart';
 
 class MOTstarPage extends StatefulWidget {
   const MOTstarPage({super.key});
@@ -17,8 +17,10 @@ class _MOTstarPageState extends State<MOTstarPage> {
   final List<Map<String, String>> _words = [
     {
       'word': 'Criticize',
-      'explanation': 'indicate the faults of someone or something in a disapproving way',
-      'example': 'The opposition criticized the government\'s failure to consult adequately.'
+      'explanation':
+          'indicate the faults of someone or something in a disapproving way',
+      'example':
+          'The opposition criticized the government\'s failure to consult adequately.'
     },
     {
       'word': 'Ephemeral',
@@ -119,11 +121,7 @@ class _MOTstarPageState extends State<MOTstarPage> {
     for (var entry in _history) {
       DateTime entryDate = DateTime.parse(entry['dateKey']);
       bool isPast = entryDate.isBefore(DateTime(now.year, now.month, now.day));
-      if (isPast && !(entry['claimed'] as bool)) {
-        entry['missed'] = true;
-      } else {
-        entry['missed'] = false;
-      }
+      entry['missed'] = isPast && !(entry['claimed'] as bool);
     }
     await _saveHistory();
   }
@@ -176,26 +174,29 @@ class _MOTstarPageState extends State<MOTstarPage> {
             children: [
               // ===== Top Bar =====
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                            color: Colors.white),
+                        icon: Icon(Icons.arrow_back_ios_new_rounded,
+                            color: Colors.white, size: 22.sp),
                         onPressed: () => Navigator.pop(context),
                       ),
-                      const Text('MOTstar',
-                          style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
+                      Text(
+                        'MOTstar',
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ]),
                     Row(children: [
                       IconButton(
-                        icon: const Icon(Icons.notifications_none_rounded,
-                            color: Colors.white),
+                        icon: Icon(Icons.notifications_none_rounded,
+                            color: Colors.white, size: 22.sp),
                         onPressed: () {
                           Navigator.push(
                             context,
@@ -212,10 +213,10 @@ class _MOTstarPageState extends State<MOTstarPage> {
                                 builder: (c) => const ProfilePage()),
                           );
                         },
-                        child: const CircleAvatar(
-                          radius: 16,
-                          backgroundImage:
-                              AssetImage('assets/avatar_male_medium_casual.png'),
+                        child: CircleAvatar(
+                          radius: 16.r,
+                          backgroundImage: const AssetImage(
+                              'assets/avatar_male_medium_casual.png'),
                         ),
                       ),
                     ])
@@ -226,41 +227,41 @@ class _MOTstarPageState extends State<MOTstarPage> {
               // ===== Golden Header =====
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 30),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFD6A84B),
+                padding: EdgeInsets.symmetric(vertical: 30.h),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFD6A84B),
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(80),
-                    bottomRight: Radius.circular(80),
+                    bottomLeft: Radius.circular(80.r),
+                    bottomRight: Radius.circular(80.r),
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   children: [
                     Text('THE GOLDEN',
                         style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.bold,
                             letterSpacing: 2,
                             color: Colors.brown)),
                     Text('WORD',
                         style: TextStyle(
-                            fontSize: 46,
+                            fontSize: 46.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.brown,
                             height: 0.9)),
                     Text('OF THE DAY',
                         style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 22.sp,
                             fontWeight: FontWeight.bold,
                             color: Colors.brown)),
                   ],
                 ),
               ),
 
-              // ===== Scrollable Content =====
+              // ===== Scrollable Section =====
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16.w),
                   child: Column(
                     children: [
                       _buildMOTCard(
@@ -272,7 +273,7 @@ class _MOTstarPageState extends State<MOTstarPage> {
                         claimed: today['claimed'],
                         onClaim: _claimToday,
                       ),
-                      const SizedBox(height: 12),
+                      SizedBox(height: 12.h),
                       ..._history.skip(1).map((h) => _buildHistoryCard(h)),
                     ],
                   ),
@@ -285,7 +286,7 @@ class _MOTstarPageState extends State<MOTstarPage> {
     );
   }
 
-  // ====== WIDGETS ======
+  // ===== WIDGETS =====
   Widget _buildMOTCard({
     required String title,
     required String word,
@@ -296,15 +297,16 @@ class _MOTstarPageState extends State<MOTstarPage> {
     required VoidCallback onClaim,
   }) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(25.r),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 10,
-              offset: const Offset(0, 5))
+            color: Colors.black.withValues(alpha: 0.1),
+            blurRadius: 10.r,
+            offset: Offset(0, 5.h),
+          )
         ],
       ),
       child: Column(
@@ -312,50 +314,52 @@ class _MOTstarPageState extends State<MOTstarPage> {
         children: [
           Text(title,
               style:
-                  const TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-          const SizedBox(height: 6),
+                  TextStyle(fontWeight: FontWeight.bold, fontSize: 18.sp)),
+          SizedBox(height: 6.h),
           Center(
             child: Text(
               '"$word"',
-              style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amber),
+              style: TextStyle(
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+                color: Colors.amber,
+              ),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Text("Explanation : $explanation",
-              style: const TextStyle(fontSize: 14)),
-          const SizedBox(height: 4),
-          Text("Example : $example",
-              style: const TextStyle(fontSize: 14)),
-          const SizedBox(height: 10),
-
+              style: TextStyle(fontSize: 14.sp)),
+          SizedBox(height: 4.h),
+          Text("Example : $example", style: TextStyle(fontSize: 14.sp)),
+          SizedBox(height: 10.h),
           LinearProgressIndicator(
             value: progress / 20,
-            minHeight: 8,
+            minHeight: 8.h,
             backgroundColor: Colors.grey.shade300,
             color: Colors.amber,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(5.r),
           ),
-          const SizedBox(height: 8),
-
+          SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(children: [
-                const Icon(Icons.star, color: Colors.amber),
-                const SizedBox(width: 4),
-                Text("$progress/20",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w500, fontSize: 15)),
+                Icon(Icons.star, color: Colors.amber, size: 20.sp),
+                SizedBox(width: 4.w),
+                Text(
+                  "$progress/20",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.sp,
+                  ),
+                ),
               ]),
               if (claimed)
                 _statusButton('Claimed', Colors.green)
               else if (_isClaimAvailable(_history[0]))
                 _claimButton(onClaim)
               else
-                _statusButton('missed', Colors.redAccent),
+                _statusButton('Missed', Colors.redAccent),
             ],
           ),
         ],
@@ -366,16 +370,17 @@ class _MOTstarPageState extends State<MOTstarPage> {
   Widget _buildHistoryCard(Map<String, dynamic> data) {
     final word = _words[data['wordIndex']]['word']!;
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.symmetric(vertical: 6.h),
+      padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: BorderRadius.circular(25.r),
         boxShadow: [
           BoxShadow(
-              color: Colors.black.withValues(alpha: 0.08),
-              blurRadius: 8,
-              offset: const Offset(0, 4))
+            color: Colors.black.withValues(alpha: 0.08),
+            blurRadius: 8.r,
+            offset: Offset(0, 4.h),
+          )
         ],
       ),
       child: Column(
@@ -383,32 +388,34 @@ class _MOTstarPageState extends State<MOTstarPage> {
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text(data['dateLabel'],
-                style: const TextStyle(
-                    fontWeight: FontWeight.bold, fontSize: 16)),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, fontSize: 16.sp)),
             Text('"$word"',
-                style: const TextStyle(
-                    color: Colors.amber, fontWeight: FontWeight.bold)),
+                style: TextStyle(
+                    color: Colors.amber,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.sp)),
           ]),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           LinearProgressIndicator(
             value: (data['progress'] / 20).clamp(0.0, 1.0),
-            minHeight: 8,
+            minHeight: 8.h,
             backgroundColor: Colors.grey.shade300,
             color: Colors.amber,
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(children: [
-              const Icon(Icons.star, color: Colors.amber),
-              const SizedBox(width: 4),
+              Icon(Icons.star, color: Colors.amber, size: 20.sp),
+              SizedBox(width: 4.w),
               Text("${data['progress']}/20",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w500, fontSize: 15)),
+                  style: TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 15.sp)),
             ]),
             if (data['claimed'])
               _statusButton('Claimed', Colors.green)
             else
-              _statusButton('missed', Colors.redAccent),
+              _statusButton('Missed', Colors.redAccent),
           ])
         ],
       ),
@@ -422,36 +429,45 @@ class _MOTstarPageState extends State<MOTstarPage> {
         setState(() {});
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
         decoration: BoxDecoration(
           color: Colors.white,
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withValues(alpha: 0.15),
-                blurRadius: 5,
-                offset: const Offset(0, 3))
+              color: Colors.black.withValues(alpha: 0.15),
+              blurRadius: 5.r,
+              offset: Offset(0, 3.h),
+            )
           ],
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
-        child: const Text('Claim',
-            style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: 15)),
+        child: Text(
+          'Claim',
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: 15.sp,
+          ),
+        ),
       ),
     );
   }
 
   Widget _statusButton(String text, Color color) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(20)),
-      child: Text(text,
-          style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.w500,
-              fontSize: 15)),
+      padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: color,
+        borderRadius: BorderRadius.circular(20.r),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+          fontSize: 15.sp,
+        ),
+      ),
     );
   }
 }

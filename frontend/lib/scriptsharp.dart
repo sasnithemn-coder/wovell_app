@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
 import 'public_speaking.dart';
@@ -31,197 +32,204 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
           ),
         ),
         child: SafeArea(
-          child: Column(
-            children: [
-              // 🔹 Top Bar
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Back Button
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const PublicSpeakingPage()),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.white,
-                        size: 24,
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // 🔹 Top Bar (fixed)
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Back Button
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const PublicSpeakingPage()),
+                          );
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                          size: 22.sp,
+                        ),
                       ),
-                    ),
 
-                    // Notification Icon
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const NotificationsPage()),
-                        );
-                      },
-                      child: const Icon(
-                        Icons.notifications_none,
-                        color: Colors.white,
-                        size: 28,
+                      // Notification + Profile (right-aligned)
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const NotificationsPage()),
+                              );
+                            },
+                            child: Padding(
+                              padding: EdgeInsets.only(right: 12.w),
+                              child: Icon(
+                                Icons.notifications_none,
+                                color: Colors.white,
+                                size: 26.sp,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ProfilePage()),
+                              );
+                            },
+                            child: CircleAvatar(
+                              radius: 18.r,
+                              backgroundImage: const AssetImage(
+                                  'assets/male_avatar.png'),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-
-                    // Profile Avatar
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProfilePage()),
-                        );
-                      },
-                      child: const CircleAvatar(
-                        radius: 18,
-                        backgroundImage:
-                            AssetImage('assets/male_avatar.png'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // 🔹 Banner Image
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Image.asset(
-                    'assets/sharpen_your_speech.png', // add this image to assets
-                    fit: BoxFit.cover,
+                    ],
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 10),
+                SizedBox(height: 16.h),
 
-              const Text(
-                'Scriptsharp',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                // 🔹 Banner Image
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20.r),
+                  child: Image.asset(
+                    'assets/sharpen_your_speech.png',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: 180.h,
+                  ),
                 ),
-              ),
 
-              const SizedBox(height: 15),
+                SizedBox(height: 12.h),
 
-              // 🔹 Topic Input Field
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Container(
+                // 🔹 Title
+                Text(
+                  'Scriptsharp',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+
+                SizedBox(height: 20.h),
+
+                // 🔹 Topic Input Field
+                Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.9),
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(15.r),
                   ),
                   child: TextField(
                     controller: topicController,
-                    style: const TextStyle(color: Colors.black),
-                    decoration: const InputDecoration(
+                    style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                    decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Set your Topic',
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
                     ),
                   ),
                 ),
-              ),
 
-              const SizedBox(height: 15),
+                SizedBox(height: 18.h),
 
-              // 🔹 Body Section
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Body Label
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 6),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFFF7B00),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        'Body',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                // 🔹 Body Label
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 14.w, vertical: 6.h),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFF7B00),
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                    child: Text(
+                      'Body',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
                       ),
                     ),
-
-                    const SizedBox(height: 8),
-
-                    // Text Input
-                    Container(
-                      height: 220,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.9),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: TextField(
-                        controller: bodyController,
-                        maxLines: null,
-                        expands: true,
-                        style: const TextStyle(color: Colors.black),
-                        decoration: const InputDecoration(
-                          contentPadding: EdgeInsets.all(16),
-                          border: InputBorder.none,
-                          hintText: 'Drop your words here',
-                          hintStyle: TextStyle(color: Colors.grey),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // 🔹 Correction Button
-              ElevatedButton(
-                onPressed: () {
-                  // Placeholder — later you can connect AI API here
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Enhancing your speech...'),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 60, vertical: 14),
-                  backgroundColor: const Color(0xFFFF7B00),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                child: const Text(
-                  'Correction',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+
+                SizedBox(height: 10.h),
+
+                // 🔹 Body Input
+                Container(
+                  height: 220.h,
+                  decoration: BoxDecoration(
+                    color: Colors.white.withValues(alpha: 0.9),
+                    borderRadius: BorderRadius.circular(15.r),
+                  ),
+                  child: TextField(
+                    controller: bodyController,
+                    maxLines: null,
+                    expands: true,
+                    style: TextStyle(color: Colors.black, fontSize: 14.sp),
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(16.w),
+                      border: InputBorder.none,
+                      hintText: 'Drop your words here',
+                      hintStyle:
+                          TextStyle(color: Colors.grey, fontSize: 14.sp),
+                    ),
                   ),
                 ),
-              ),
-            ],
+
+                SizedBox(height: 25.h),
+
+                // 🔹 Correction Button
+                ElevatedButton(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Enhancing your speech...'),
+                      ),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 60.w, vertical: 14.h),
+                    backgroundColor: const Color(0xFFFF7B00),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(25.r),
+                    ),
+                  ),
+                  child: Text(
+                    'Correction',
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20.h),
+              ],
+            ),
           ),
         ),
       ),
