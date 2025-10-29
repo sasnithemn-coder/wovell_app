@@ -29,7 +29,7 @@ class MainHomePage extends StatelessWidget {
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -51,7 +51,7 @@ class MainHomePage extends StatelessWidget {
                           icon: Icon(
                             Icons.notifications_none,
                             color: Colors.white,
-                            size: 26.sp,
+                            size: 28.sp,
                           ),
                           onPressed: () {
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -72,7 +72,7 @@ class MainHomePage extends StatelessWidget {
                   ],
                 ),
 
-                SizedBox(height: 16.h),
+                SizedBox(height: 20.h),
 
                 // ====== WELCOME TEXT ======
                 Padding(
@@ -81,14 +81,14 @@ class MainHomePage extends StatelessWidget {
                     'Welcome to\nWovell !',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 30.sp,
+                      fontSize: 32.sp,
                       fontWeight: FontWeight.bold,
-                      height: 1.1,
+                      height: 1.2,
                     ),
                   ),
                 ),
 
-                SizedBox(height: 28.h),
+                SizedBox(height: 35.h),
 
                 // ====== SKILL CARDS ======
                 _buildSkillCard(
@@ -103,7 +103,8 @@ class MainHomePage extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 28.h),
+
                 _buildSkillCard(
                   image: 'assets/interview_skills.jpg',
                   title: 'Interview Skills',
@@ -116,7 +117,8 @@ class MainHomePage extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 28.h),
+
                 _buildSkillCard(
                   image: 'assets/ethics_etiquette.jpg',
                   title: 'Ethics & Etiquette',
@@ -129,7 +131,8 @@ class MainHomePage extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 20.h),
+                SizedBox(height: 28.h),
+
                 _buildSkillCard(
                   image: 'assets/dressing_sense.jpg',
                   title: 'Dressing Sense',
@@ -142,6 +145,7 @@ class MainHomePage extends StatelessWidget {
                     );
                   },
                 ),
+                SizedBox(height: 50.h), // final breathing space
               ],
             ),
           ),
@@ -150,7 +154,7 @@ class MainHomePage extends StatelessWidget {
     );
   }
 
-  // Skill card widget
+  // Skill card widget (unchanged logic, fixed fit & spacing)
   Widget _buildSkillCard({
     required String image,
     required String title,
@@ -161,17 +165,18 @@ class MainHomePage extends StatelessWidget {
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
+          // White container with text
           Container(
             width: double.infinity,
-            height: 100.h,
-            margin: EdgeInsets.only(left: 60.w),
+            height: 110.h, // slightly taller for proportion
+            margin: EdgeInsets.only(left: 65.w),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(22.r),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.15),
-                  blurRadius: 8.r,
+                  blurRadius: 10.r,
                   offset: Offset(2.w, 4.h),
                 ),
               ],
@@ -191,15 +196,18 @@ class MainHomePage extends StatelessWidget {
               ),
             ),
           ),
+
+          // Left image — adjusted fit to prevent cropping
           Positioned(
             left: 0,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(22.r),
               child: Image.asset(
                 image,
-                width: 120.w,
-                height: 100.h,
-                fit: BoxFit.cover,
+                width: 130.w,
+                height: 110.h,
+                fit: BoxFit.contain, // ✅ prevents image cropping
+                alignment: Alignment.center,
               ),
             ),
           ),

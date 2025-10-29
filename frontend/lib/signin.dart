@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'signup.dart';
-import 'main_home.dart';
+import 'main_home.dart'; // ✅ direct redirect here
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -11,103 +11,94 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final _scrollController = ScrollController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _emailFocus = FocusNode();
+  final _passwordFocus = FocusNode();
   bool _obscurePassword = true;
 
+  @override
+  void initState() {
+    super.initState();
+    _emailFocus.addListener(_scrollToField);
+    _passwordFocus.addListener(_scrollToField);
+  }
+
+  void _scrollToField() {
+    if (_emailFocus.hasFocus || _passwordFocus.hasFocus) {
+      Future.delayed(const Duration(milliseconds: 250), () {
+        if (_scrollController.hasClients) {
+          _scrollController.animateTo(
+            _scrollController.position.maxScrollExtent,
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
+  }
+
   void _signIn() {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text.trim();
 
     if (email.isEmpty || password.isEmpty) {
       _showMessage('Please fill in all fields');
       return;
     }
-
     if (!_isValidEmail(email)) {
       _showMessage('Please enter a valid email');
       return;
     }
 
+    // ✅ Redirect directly to MainHomePage
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const MainHomePage()),
+      MaterialPageRoute(builder: (_) => const MainHomePage()),
     );
   }
 
-  bool _isValidEmail(String email) {
-    return RegExp(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
-  }
+  bool _isValidEmail(String email) =>
+      RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
 
-  void _showMessage(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(message)),
-    );
-  }
-
-  Widget _socialButton(String assetPath, VoidCallback onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 56.w,
-        height: 56.w,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Center(
-          child: Icon(
-            assetPath.contains('facebook')
-                ? Icons.facebook
-                : Icons.g_mobiledata,
-            size: 32.sp,
-            color:
-                assetPath.contains('facebook') ? Colors.blue : Colors.red,
-          ),
-        ),
-      ),
-    );
-  }
+  void _showMessage(String msg) =>
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
-            colors: [
-              Color(0xFF0D7C7C),
-              Color(0xFF1A3A5C),
-            ],
+            colors: [Color(0xFF0D7C7C), Color(0xFF1A3A5C)],
           ),
         ),
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            controller: _scrollController,
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 60.h),
                 Text(
-                  'Hello',
+                  'Welcome Back!',
                   style: TextStyle(
-                    fontSize: 48.sp,
+                    fontSize: 44.sp,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
+                SizedBox(height: 10.h),
                 Text(
-                  'Sign in!',
-                  style: TextStyle(
-                    fontSize: 48.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+                  'Sign in to continue your journey.',
+                  style: TextStyle(fontSize: 16.sp, color: Colors.white70),
                 ),
-                SizedBox(height: 40.h),
+                SizedBox(height: 30.h),
                 Container(
                   padding: EdgeInsets.all(24.w),
                   decoration: BoxDecoration(
@@ -117,90 +108,24 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Email',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A3A5C),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      TextField(
+                      _buildTextField(
+                        label: 'Email',
+                        hint: 'Enter your email',
                         controller: _emailController,
-                        decoration: InputDecoration(
-                          hintText: 'Enter your email address',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14.sp,
-                          ),
-                          border: const UnderlineInputBorder(),
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                        ),
-                        keyboardType: TextInputType.emailAddress,
+                        focusNode: _emailFocus,
+                        isEmail: true,
                       ),
-                      SizedBox(height: 24.h),
-                      Text(
-                        'Password',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0xFF1A3A5C),
-                        ),
-                      ),
-                      SizedBox(height: 8.h),
-                      TextField(
+                      SizedBox(height: 20.h),
+                      _buildPasswordField(
+                        label: 'Password',
+                        hint: 'Enter your password',
                         controller: _passwordController,
-                        obscureText: _obscurePassword,
-                        decoration: InputDecoration(
-                          hintText: 'Enter your password',
-                          hintStyle: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 14.sp,
-                          ),
-                          border: const UnderlineInputBorder(),
-                          enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey),
-                          ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _obscurePassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                              color: Colors.grey,
-                              size: 20.sp,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _obscurePassword = !_obscurePassword;
-                              });
-                            },
-                          ),
-                        ),
+                        obscure: _obscurePassword,
+                        toggle: () => setState(
+                            () => _obscurePassword = !_obscurePassword),
+                        focusNode: _passwordFocus,
                       ),
-                      SizedBox(height: 16.h),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {
-                            _showMessage(
-                                'Forgot password feature coming soon!');
-                          },
-                          child: Text(
-                            'Forgot password?',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 14.sp,
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 30.h),
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
@@ -223,54 +148,24 @@ class _SignInScreenState extends State<SignInScreen> {
                         ),
                       ),
                       SizedBox(height: 24.h),
-                      Center(
-                        child: Text(
-                          'or',
-                          style: TextStyle(
-                            fontSize: 16.sp,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 16.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _socialButton(
-                            'assets/facebook.png',
-                            () => _showMessage('Facebook login coming soon!'),
-                          ),
-                          SizedBox(width: 24.w),
-                          _socialButton(
-                            'assets/google.png',
-                            () => _showMessage('Google login coming soon!'),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 24.h),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Don't have an account?",
                             style: TextStyle(
-                              color: Colors.black87,
-                              fontSize: 14.sp,
-                            ),
+                                color: Colors.black87, fontSize: 14.sp),
                           ),
                           TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SignUpScreen(),
-                                ),
-                              );
-                            },
+                            onPressed: () => Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const SignUpScreen()),
+                            ),
                             child: Text(
                               'Sign up',
                               style: TextStyle(
-                                color: Colors.black,
+                                color: const Color(0xFF1A3A5C),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14.sp,
                               ),
@@ -281,11 +176,82 @@ class _SignInScreenState extends State<SignInScreen> {
                     ],
                   ),
                 ),
+                SizedBox(height: 20.h),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTextField({
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+    required FocusNode focusNode,
+    bool isEmail = false,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF1A3A5C))),
+        SizedBox(height: 8.h),
+        TextField(
+          controller: controller,
+          focusNode: focusNode,
+          keyboardType:
+              isEmail ? TextInputType.emailAddress : TextInputType.text,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
+            border: const UnderlineInputBorder(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField({
+    required String label,
+    required String hint,
+    required TextEditingController controller,
+    required bool obscure,
+    required VoidCallback toggle,
+    required FocusNode focusNode,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(label,
+            style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xFF1A3A5C))),
+        SizedBox(height: 8.h),
+        TextField(
+          controller: controller,
+          focusNode: focusNode,
+          obscureText: obscure,
+          decoration: InputDecoration(
+            hintText: hint,
+            hintStyle: TextStyle(color: Colors.grey, fontSize: 14.sp),
+            border: const UnderlineInputBorder(),
+            suffixIcon: IconButton(
+              icon: Icon(
+                obscure ? Icons.visibility_off : Icons.visibility,
+                color: Colors.grey,
+                size: 20.sp,
+              ),
+              onPressed: toggle,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

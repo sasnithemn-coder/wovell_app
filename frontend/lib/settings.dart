@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
@@ -11,21 +12,25 @@ class SettingsPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ====== TOP BAR ======
+            // ===== TOP BAR =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding:
+                  EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: Colors.black87, size: 22),
+                    icon: Icon(
+                      Icons.arrow_back_ios_new_rounded,
+                      color: Colors.black87,
+                      size: 22.sp,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   ),
-                  const SizedBox(width: 8),
-                  const Text(
+                  SizedBox(width: 8.w),
+                  Text(
                     'Settings',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 24.sp,
                       fontWeight: FontWeight.w700,
                       color: Colors.black87,
                     ),
@@ -34,43 +39,44 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
 
-            // ====== USER PROFILE CARD ======
+            // ===== USER PROFILE CARD =====
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding:
+                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(20.r),
                 child: BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                   child: Container(
                     decoration: BoxDecoration(
                       color: const Color(0xFFFF8C42).withValues(alpha: 0.85),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(20.r),
                     ),
-                    padding: const EdgeInsets.all(16),
+                    padding: EdgeInsets.all(16.w),
                     child: Row(
                       children: [
-                        const CircleAvatar(
-                          radius: 28,
-                          backgroundImage: AssetImage(
-                              'assets/avatar_male_medium_casual.png'), // Avatar preview
+                        CircleAvatar(
+                          radius: 28.r,
+                          backgroundImage: const AssetImage(
+                              'assets/avatar_male_medium_casual.png'),
                         ),
-                        const SizedBox(width: 16),
+                        SizedBox(width: 16.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               'Steven Smith',
                               style: TextStyle(
-                                fontSize: 18,
+                                fontSize: 18.sp,
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Text(
                               'iit@gmail.com',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 14.sp,
                                 color: Colors.white70,
                               ),
                             ),
@@ -83,13 +89,13 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
 
-            // ====== SCROLLABLE SETTINGS LIST ======
+            // ===== SCROLLABLE SETTINGS LIST =====
             Expanded(
               child: ListView(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                 children: [
                   _buildSettingsButton(
                       icon: Icons.favorite,
@@ -135,7 +141,7 @@ class SettingsPage extends StatelessWidget {
                       icon: Icons.logout_rounded,
                       label: 'Logout',
                       color: Colors.deepOrangeAccent),
-                  const SizedBox(height: 40),
+                  SizedBox(height: 40.h),
                 ],
               ),
             ),
@@ -145,22 +151,22 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  // ====== REUSABLE SETTINGS BUTTON ======
+  // ===== REUSABLE SETTINGS BUTTON =====
   Widget _buildSettingsButton({
     required IconData icon,
     required String label,
     required Color color,
   }) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: EdgeInsets.symmetric(vertical: 6.h),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(18.r),
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
           child: GestureDetector(
-            onTap: () {}, 
+            onTap: () {},
             child: Container(
-              height: 55,
+              height: 55.h,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
@@ -170,32 +176,32 @@ class SettingsPage extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(18.r),
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withValues(alpha: 0.15),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
+                    blurRadius: 10.r,
+                    offset: Offset(0, 5.h),
                   ),
                 ],
               ),
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
                 children: [
-                  Icon(icon, color: color, size: 26),
-                  const SizedBox(width: 14),
+                  Icon(icon, color: color, size: 26.sp),
+                  SizedBox(width: 14.w),
                   Expanded(
                     child: Text(
                       label,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                  const Icon(Icons.arrow_forward_ios_rounded,
-                      color: Colors.white70, size: 18),
+                  Icon(Icons.arrow_forward_ios_rounded,
+                      color: Colors.white70, size: 18.sp),
                 ],
               ),
             ),

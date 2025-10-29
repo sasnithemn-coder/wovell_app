@@ -415,7 +415,7 @@ class _SpeechDutyPageState extends State<SpeechDutyPage>
                       _buildTodayCard(),
                       SizedBox(height: 12.h),
                       // ✅ History list
-                      ...history.map((item) => _buildHistoryCard(item)).toList(),
+                      ...history.map((item) => _buildHistoryCard(item)),
                       SizedBox(height: 20.h),
                     ],
                   ),

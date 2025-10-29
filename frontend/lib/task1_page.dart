@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'voz_hut.dart'; // for recording logic
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'voz_hut.dart';
 
 class Task1Page extends StatefulWidget {
   const Task1Page({super.key});
@@ -29,58 +30,75 @@ class _Task1PageState extends State<Task1Page> {
           Column(
             children: [
               SafeArea(
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                      onPressed: () => Navigator.pop(context),
-                    ),
-                    const Text(
-                      "Task 01",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.arrow_back,
+                            color: Colors.white, size: 24.sp),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                    ),
-                  ],
+                      Text(
+                        "Task 01",
+                        style: TextStyle(
+                          fontSize: 22.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Container(
-                margin: const EdgeInsets.all(20),
-                padding: const EdgeInsets.all(20),
+                margin: EdgeInsets.all(20.w),
+                padding: EdgeInsets.all(20.w),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.15),
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(20.r),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Introduce yourself",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20)),
-                    SizedBox(height: 10),
-                    Text("★ Complete task within 4–5 minutes",
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
                     Text(
-                        "★ Name, background and education or career path must be included",
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
-                    Text("★ Your voice must be perfect with confidence",
-                        style: TextStyle(color: Colors.white, fontSize: 16)),
+                      "Introduce yourself",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    ),
+                    SizedBox(height: 10.h),
+                    Text(
+                      "★ Complete task within 4–5 minutes",
+                      style:
+                          TextStyle(color: Colors.white, fontSize: 16.sp),
+                    ),
+                    Text(
+                      "★ Name, background and education or career path must be included",
+                      style:
+                          TextStyle(color: Colors.white, fontSize: 16.sp),
+                    ),
+                    Text(
+                      "★ Your voice must be perfect with confidence",
+                      style:
+                          TextStyle(color: Colors.white, fontSize: 16.sp),
+                    ),
                   ],
                 ),
               ),
               const Spacer(),
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(20),
-                decoration: const BoxDecoration(
+                padding: EdgeInsets.all(20.w),
+                decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(40)),
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(40.r),
+                  ),
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -96,20 +114,24 @@ class _Task1PageState extends State<Task1Page> {
                             colors: [Color(0xFFFF914D), Color(0xFFFF6D1A)],
                           ),
                         ),
-                        padding: const EdgeInsets.all(25),
-                        child: const Icon(Icons.mic, color: Colors.white, size: 45),
+                        padding: EdgeInsets.all(25.w),
+                        child: Icon(
+                          isRecording ? Icons.stop : Icons.mic,
+                          color: Colors.white,
+                          size: 45.sp,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const Text(
+                    SizedBox(height: 10.h),
+                    Text(
                       "00:00",
                       style: TextStyle(
                         color: Colors.black,
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 14),
+                    SizedBox(height: 14.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -118,23 +140,42 @@ class _Task1PageState extends State<Task1Page> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24.w, vertical: 10.h),
                           ),
-                          child: const Text("Evaluation",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text(
+                            "Evaluation",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                         ElevatedButton(
                           onPressed: () => Navigator.pop(context),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
+                              borderRadius: BorderRadius.circular(20.r),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 24.w, vertical: 10.h),
                           ),
-                          child: const Text("Submit",
-                              style: TextStyle(color: Colors.white)),
+                          child: Text(
+                            "Submit",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ],
-                    )
+                    ),
+                    SizedBox(height: 10.h),
                   ],
                 ),
               ),

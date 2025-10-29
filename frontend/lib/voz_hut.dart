@@ -185,7 +185,7 @@ class _VozHutPageState extends State<VozHutPage> {
                             ),
                           ),
                         ),
-                        ..._history.map((h) => _HistoryTile(entry: h)).toList(),
+                        ..._history.map((h) => _HistoryTile(entry: h)),
                       ],
                       SizedBox(height: 20.h),
                     ],

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
-import 'task1_page.dart'; // the task page (recording logic reused from voz_hut)
+import 'task1_page.dart';
 
 class LevelUpPage extends StatefulWidget {
   const LevelUpPage({super.key});
@@ -11,7 +12,6 @@ class LevelUpPage extends StatefulWidget {
 }
 
 class _LevelUpPageState extends State<LevelUpPage> {
-  // Dummy star data
   final Map<int, int> starsEarned = {
     1: 3,
     2: 2,
@@ -28,19 +28,19 @@ class _LevelUpPageState extends State<LevelUpPage> {
   Widget _buildTopBar() {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         child: Row(
           children: [
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(
-                padding: const EdgeInsets.all(6),
+                padding: EdgeInsets.all(6.w),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(Icons.arrow_back_ios_new,
-                    color: Colors.white, size: 20),
+                child: Icon(Icons.arrow_back_ios_new,
+                    color: Colors.white, size: 20.sp),
               ),
             ),
             const Spacer(),
@@ -48,32 +48,37 @@ class _LevelUpPageState extends State<LevelUpPage> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const NotificationsPage()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const NotificationsPage()),
+                    );
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.notifications_none,
-                        color: Colors.white, size: 22),
+                    child: Icon(Icons.notifications_none,
+                        color: Colors.white, size: 22.sp),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (_) => const ProfilePage()));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const ProfilePage()),
+                    );
                   },
-                  child: const CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage('assets/avatar.png'),
+                  child: CircleAvatar(
+                    radius: 18.r,
+                    backgroundImage: const AssetImage('assets/avatar.png'),
                   ),
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -82,43 +87,49 @@ class _LevelUpPageState extends State<LevelUpPage> {
 
   Widget _buildLevelInfoCard() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white.withValues(alpha: 0.25),
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(20.r),
         ),
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
+          children: [
             Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 12),
-                child: Text(
-                  "Level 1",
-                  style: TextStyle(
-                    backgroundColor: Color(0xFFB47138),
-                    color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
+                padding: EdgeInsets.only(bottom: 12.h),
+                child: Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFB47138),
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                  child: Text(
+                    "Level 1",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
             ),
             Text("• Level 1 of Bronze",
-                style: TextStyle(color: Colors.white, fontSize: 16)),
+                style: TextStyle(color: Colors.white, fontSize: 16.sp)),
             Text("• Start your journey here",
-                style: TextStyle(color: Colors.white, fontSize: 16)),
+                style: TextStyle(color: Colors.white, fontSize: 16.sp)),
             Text("• Just wake up your voice",
-                style: TextStyle(color: Colors.white, fontSize: 16)),
+                style: TextStyle(color: Colors.white, fontSize: 16.sp)),
             Text("• Only require your voice",
-                style: TextStyle(color: Colors.white, fontSize: 16)),
+                style: TextStyle(color: Colors.white, fontSize: 16.sp)),
             Text("• Require complete 25 stars to move to next level",
-                style: TextStyle(color: Colors.white, fontSize: 16)),
-            Text(
-                "• Just follow the simple instructions and reach your next level",
-                style: TextStyle(color: Colors.white, fontSize: 16)),
+                style: TextStyle(color: Colors.white, fontSize: 16.sp)),
+            Text("• Just follow simple instructions and reach your next level",
+                style: TextStyle(color: Colors.white, fontSize: 16.sp)),
           ],
         ),
       ),
@@ -137,8 +148,8 @@ class _LevelUpPageState extends State<LevelUpPage> {
       child: Column(
         children: [
           Container(
-            width: 70,
-            height: 70,
+            width: 70.w,
+            height: 70.w,
             decoration: const BoxDecoration(
               color: Color(0xFF008080),
               shape: BoxShape.circle,
@@ -146,19 +157,20 @@ class _LevelUpPageState extends State<LevelUpPage> {
             alignment: Alignment.center,
             child: Text(
               "$level",
-              style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 22.sp,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          const SizedBox(height: 6),
+          SizedBox(height: 6.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(5, (i) {
               bool filled = i < stars;
               return Icon(Icons.star,
-                  color: filled ? Colors.amber : Colors.grey, size: 18);
+                  color: filled ? Colors.amber : Colors.grey, size: 18.sp);
             }),
           ),
         ],
@@ -170,12 +182,12 @@ class _LevelUpPageState extends State<LevelUpPage> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: List.generate(10, (index) {
             return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              padding: EdgeInsets.symmetric(horizontal: 14.w),
               child: _buildLevelButton(index + 1),
             );
           }),
@@ -199,14 +211,14 @@ class _LevelUpPageState extends State<LevelUpPage> {
           Column(
             children: [
               _buildTopBar(),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _buildLevelInfoCard(),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               Expanded(
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Padding(
-                    padding: const EdgeInsets.only(bottom: 50),
+                    padding: EdgeInsets.only(bottom: 50.h),
                     child: _buildRoadMap(),
                   ),
                 ),
