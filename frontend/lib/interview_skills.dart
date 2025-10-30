@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
 import 'level_up_page.dart';
+import 'widgets/profile_avatar.dart';
+
 
 class InterviewSkillsPage extends StatelessWidget {
   const InterviewSkillsPage({super.key});
@@ -68,17 +70,15 @@ class InterviewSkillsPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 12.w),
-                      GestureDetector(
+                      ProfileAvatar(
+                        radius: 20, // keep the same as your current icon size
                         onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const ProfilePage()));
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const ProfilePage()),
+                          );
                         },
-                        child: CircleAvatar(
-                          radius: 18.r,
-                          backgroundImage: const AssetImage('assets/avatar.png'),
-                        ),
                       ),
                     ],
                   ),

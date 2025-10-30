@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'models/user_progress.dart'; // ✅ adjust if your provider file is elsewhere
 import 'main_home.dart';
 
 class AvatarPage extends StatefulWidget {
@@ -12,10 +14,18 @@ class AvatarPage extends StatefulWidget {
 class _AvatarPageState extends State<AvatarPage> {
   String selectedGender = 'male';
 
+  // ✅ Returns the large preview avatar (full-body)
   String getAvatarImage() {
     return selectedGender == 'male'
-        ? 'assets/male_avatar.png'
-        : 'assets/female_avatar.png';
+        ? 'assets/avatars/male_avatar.png'
+        : 'assets/avatars/female_avatar.png';
+  }
+
+  // ✅ Returns the bust version to be saved & used everywhere else
+  String getBustImage() {
+    return selectedGender == 'male'
+        ? 'assets/avatars/male_bust.png'
+        : 'assets/avatars/female_bust.png';
   }
 
   @override
@@ -130,11 +140,20 @@ class _AvatarPageState extends State<AvatarPage> {
                         ),
                         backgroundColor: const Color(0xFFFF7B00),
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        // ✅ Save the bust image path to provider
+                        final bustPath = getBustImage();
+                        await context
+                            .read<UserProgress>()
+                            .setAvatarBustPath(bustPath);
+                        print('✅ Saved avatar bust path: $bustPath');
+
+                        // ✅ Continue with existing navigation logic
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const MainHomePage()),
+                            builder: (context) => const MainHomePage(),
+                          ),
                         );
                       },
                       child: Text(

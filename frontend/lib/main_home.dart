@@ -5,6 +5,8 @@ import 'widgets/side_menu.dart';
 import 'interview_skills.dart';
 import 'ethics_etiquettes.dart';
 import 'dressing_sense.dart';
+import 'widgets/profile_avatar.dart';
+import 'profile_page.dart';
 
 class MainHomePage extends StatelessWidget {
   const MainHomePage({super.key});
@@ -61,11 +63,14 @@ class MainHomePage extends StatelessWidget {
                             );
                           },
                         ),
-                        CircleAvatar(
-                          radius: 20.r,
-                          backgroundImage: const AssetImage(
-                            'assets/avatar_male_medium_casual.png',
-                          ),
+                        ProfileAvatar(
+                          radius: 20, // keep the same as your current icon size
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => const ProfilePage()),
+                            );
+                          },
                         ),
                       ],
                     ),
