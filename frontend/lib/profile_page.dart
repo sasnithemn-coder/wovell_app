@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'signin.dart'; // for redirect on logout
-import 'avatar.dart'; // for editing avatar
+import 'signin.dart';
+import 'avatar.dart';
 import 'models/user_progress.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -14,7 +15,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   String userName = 'Steven Smith';
   String email = 'iit@gmail.com';
-
   final TextEditingController _nameController = TextEditingController();
 
   void _editName() {
@@ -88,7 +88,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    // read live progress from provider
     final userProgress = Provider.of<UserProgress>(context);
 
     return Scaffold(
@@ -106,19 +105,19 @@ class _ProfilePageState extends State<ProfilePage> {
               // ===== Top Bar =====
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                    EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                          color: Colors.white, size: 22),
+                      icon: Icon(Icons.arrow_back_ios_new_rounded,
+                          color: Colors.white, size: 22.sp),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    const SizedBox(width: 8),
-                    const Text(
+                    SizedBox(width: 8.w),
+                    Text(
                       'My Profile',
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
@@ -131,24 +130,42 @@ class _ProfilePageState extends State<ProfilePage> {
               Expanded(
                 child: Container(
                   width: double.infinity,
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(50),
-                      topRight: Radius.circular(50),
+                      topLeft: Radius.circular(50.r),
+                      topRight: Radius.circular(50.r),
                     ),
                   ),
                   child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(20.w),
                     child: Column(
                       children: [
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
+
+                        // ===== Avatar bust image with edit icon =====
                         Stack(
+                          alignment: Alignment.center,
                           children: [
-                            const CircleAvatar(
-                              radius: 55,
-                              backgroundImage: AssetImage(
-                                  'assets/avatar_male_medium_casual.png'),
+                            Consumer<UserProgress>(
+                              builder: (context, progress, _) {
+                                final avatarPath = progress.avatarBustPath;
+                                return CircleAvatar(
+                                  radius: 60.r,
+                                  backgroundColor: Colors.grey.shade200,
+                                  backgroundImage: avatarPath != null
+                                      ? (avatarPath.startsWith('assets/')
+                                          ? AssetImage(avatarPath)
+                                          : NetworkImage(avatarPath)
+                                              as ImageProvider)
+                                      : null,
+                                  child: avatarPath == null
+                                      ? Icon(Icons.person,
+                                          size: 60.sp,
+                                          color: Colors.grey.shade600)
+                                      : null,
+                                );
+                              },
                             ),
                             Positioned(
                               bottom: 0,
@@ -163,44 +180,49 @@ class _ProfilePageState extends State<ProfilePage> {
                                   );
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.all(6),
+                                  padding: EdgeInsets.all(6.w),
                                   decoration: const BoxDecoration(
                                     color: Color(0xFF0D7C7C),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(Icons.edit,
-                                      color: Colors.white, size: 18),
+                                  child: Icon(Icons.edit,
+                                      color: Colors.white, size: 18.sp),
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 10),
+
+                        SizedBox(height: 10.h),
+
+                        // ===== User name + edit =====
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
                               userName,
-                              style: const TextStyle(
-                                fontSize: 22,
+                              style: TextStyle(
+                                fontSize: 22.sp,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF1A3A5C),
+                                color: const Color(0xFF1A3A5C),
                               ),
                             ),
-                            const SizedBox(width: 6),
+                            SizedBox(width: 6.w),
                             GestureDetector(
                               onTap: _editName,
-                              child: const Icon(Icons.edit,
-                                  color: Color(0xFF1A3A5C), size: 20),
+                              child: Icon(Icons.edit,
+                                  color: const Color(0xFF1A3A5C), size: 20.sp),
                             ),
                           ],
                         ),
                         Text(
                           email,
-                          style:
-                              const TextStyle(color: Colors.grey, fontSize: 14),
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14.sp,
+                          ),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         // ===== Stats Row =====
                         Row(
@@ -211,13 +233,12 @@ class _ProfilePageState extends State<ProfilePage> {
                             _StatItem(label: 'Likes', value: '135'),
                           ],
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
-                        // ===== Progress Cards (dynamic from provider) =====
-                        const SizedBox(height: 4),
+                        // ===== Progress Cards =====
                         ...userProgress.progress.entries.map((entry) {
                           return Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            padding: EdgeInsets.symmetric(vertical: 8.h),
                             child: _ProgressCard(
                               title: entry.key,
                               progress: entry.value,
@@ -225,47 +246,52 @@ class _ProfilePageState extends State<ProfilePage> {
                           );
                         }),
 
-                        const SizedBox(height: 20),
+                        SizedBox(height: 20.h),
 
                         // ===== Logout Button =====
                         ElevatedButton.icon(
                           onPressed: _logout,
-                          icon: const Icon(Icons.logout_rounded,
-                              color: Color(0xFF1A3A5C)),
-                          label: const Text(
+                          icon: Icon(Icons.logout_rounded,
+                              color: const Color(0xFF1A3A5C), size: 20.sp),
+                          label: Text(
                             'Log out',
                             style: TextStyle(
-                                fontSize: 16, color: Color(0xFF1A3A5C)),
+                              fontSize: 16.sp,
+                              color: const Color(0xFF1A3A5C),
+                            ),
                           ),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             backgroundColor: Colors.grey.shade200,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(15.r),
                             ),
-                            minimumSize: const Size(220, 50),
+                            minimumSize: Size(220.w, 50.h),
                           ),
                         ),
-                        const SizedBox(height: 10),
+                        SizedBox(height: 10.h),
 
                         // ===== Delete Account Button =====
                         ElevatedButton.icon(
                           onPressed: _deleteAccount,
-                          icon:
-                              const Icon(Icons.delete_outline, color: Colors.white),
-                          label: const Text(
+                          icon: Icon(Icons.delete_outline,
+                              color: Colors.white, size: 20.sp),
+                          label: Text(
                             'Delete Account',
-                            style: TextStyle(fontSize: 16, color: Colors.white),
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                            ),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.redAccent,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius: BorderRadius.circular(15.r),
                             ),
-                            minimumSize: const Size(220, 50),
+                            minimumSize: Size(220.w, 50.h),
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        SizedBox(height: 40.h),
                       ],
                     ),
                   ),
@@ -291,22 +317,22 @@ class _StatItem extends StatelessWidget {
       children: [
         Text(
           value,
-          style: const TextStyle(
-            fontSize: 20,
+          style: TextStyle(
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
         Text(
           label,
-          style: const TextStyle(color: Colors.grey, fontSize: 14),
+          style: TextStyle(color: Colors.grey, fontSize: 14.sp),
         ),
       ],
     );
   }
 }
 
-// ===== Progress Card Widget (animated) =====
+// ===== Progress Card Widget =====
 class _ProgressCard extends StatelessWidget {
   final String title;
   final int progress;
@@ -318,50 +344,50 @@ class _ProgressCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFF9F9F9),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(20.r),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.shade300,
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+            blurRadius: 8.r,
+            offset: Offset(0, 4.h),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Animated progress
           TweenAnimationBuilder<double>(
             tween: Tween(begin: 0, end: progress / 100),
             duration: const Duration(milliseconds: 600),
             builder: (context, value, _) => ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
               child: LinearProgressIndicator(
                 value: value,
-                minHeight: 10,
+                minHeight: 10.h,
                 backgroundColor: Colors.grey.shade300,
                 color: const Color(0xFFFF8C42),
               ),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 title,
-                style: const TextStyle(
-                  color: Color(0xFF1A3A5C),
+                style: TextStyle(
+                  color: const Color(0xFF1A3A5C),
                   fontWeight: FontWeight.w600,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                 ),
               ),
               Text(
                 '$progress/100',
-                style: const TextStyle(
-                  color: Color(0xFF1A3A5C),
+                style: TextStyle(
+                  color: const Color(0xFF1A3A5C),
                   fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
                 ),
               ),
             ],

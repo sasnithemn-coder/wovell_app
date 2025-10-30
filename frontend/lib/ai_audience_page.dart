@@ -1,7 +1,9 @@
+// lib/ai_audience_page.dart
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:record/record.dart';
 import 'package:http/http.dart' as http;
 
@@ -17,7 +19,6 @@ class AiAudiencePage extends StatefulWidget {
 
 class _AiAudiencePageState extends State<AiAudiencePage>
     with TickerProviderStateMixin {
-  // State variables
   bool _showRecordingSection = false;
   bool _isRecording = false;
   bool _isLoadingFeedback = false;
@@ -41,9 +42,6 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // AUDIO RECORDING LOGIC
-  // ---------------------------------------------------------------------------
   Future<void> _startRecording() async {
     final hasPermission = await _recorder.hasPermission();
     if (!hasPermission) {
@@ -58,7 +56,6 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     final path =
         '$appDir/ai_audience_${DateTime.now().millisecondsSinceEpoch}.m4a';
 
-    // RecordConfig (correct for record v5+)
     const config = RecordConfig(
       encoder: AudioEncoder.aacLc,
       bitRate: 128000,
@@ -75,6 +72,10 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     });
 
     _timer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (!mounted) {
+        t.cancel();
+        return;
+      }
       setState(() {
         _recordDuration = Duration(seconds: _recordDuration.inSeconds + 1);
       });
@@ -95,9 +96,6 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     await _sendAudioToAI(File(path));
   }
 
-  // ---------------------------------------------------------------------------
-  // AI FEEDBACK LOGIC
-  // ---------------------------------------------------------------------------
   Future<void> _sendAudioToAI(File audioFile) async {
     setState(() {
       _isLoadingFeedback = true;
@@ -135,17 +133,14 @@ class _AiAudiencePageState extends State<AiAudiencePage>
         _feedbackList = ["Error sending audio: $e"];
       });
     } finally {
-  if (mounted) {
-    setState(() {
-      _isLoadingFeedback = false;
-    });
-  }
-}
+      if (mounted) {
+        setState(() {
+          _isLoadingFeedback = false;
+        });
+      }
+    }
   }
 
-  // ---------------------------------------------------------------------------
-  // HELPERS
-  // ---------------------------------------------------------------------------
   String _formatDuration(Duration d) {
     final mm = d.inMinutes.remainder(60).toString().padLeft(2, '0');
     final ss = d.inSeconds.remainder(60).toString().padLeft(2, '0');
@@ -160,25 +155,22 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     super.dispose();
   }
 
-  // ---------------------------------------------------------------------------
-  // UI SECTION: TOP BAR
-  // ---------------------------------------------------------------------------
   Widget _buildTopBar() {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         child: Row(
           children: [
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(
-                padding: const EdgeInsets.all(6),
+                padding: EdgeInsets.all(6.w),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
-                child:
-                    const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 20),
+                child: Icon(Icons.arrow_back_ios_new,
+                    color: Colors.white, size: 20.sp),
               ),
             ),
             const Spacer(),
@@ -188,20 +180,21 @@ class _AiAudiencePageState extends State<AiAudiencePage>
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const NotificationsPage()),
+                      MaterialPageRoute(
+                          builder: (_) => const NotificationsPage()),
                     );
                   },
                   child: Container(
-                    padding: const EdgeInsets.all(8),
+                    padding: EdgeInsets.all(8.w),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.15),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.notifications_none,
-                        color: Colors.white, size: 22),
+                    child:
+                        Icon(Icons.notifications_none, color: Colors.white, size: 22.sp),
                   ),
                 ),
-                const SizedBox(width: 12),
+                SizedBox(width: 12.w),
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -209,9 +202,9 @@ class _AiAudiencePageState extends State<AiAudiencePage>
                       MaterialPageRoute(builder: (_) => const ProfilePage()),
                     );
                   },
-                  child: const CircleAvatar(
-                    radius: 18,
-                    backgroundImage: AssetImage('assets/avatar.png'),
+                  child: CircleAvatar(
+                    radius: 18.r,
+                    backgroundImage: const AssetImage('assets/avatar.png'),
                   ),
                 ),
               ],
@@ -222,10 +215,37 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // UI SECTION: INTRO PAGE
-  // ---------------------------------------------------------------------------
+  Widget _optionCard(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 6.h),
+      child: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xFFE8FFFF),
+          borderRadius: BorderRadius.circular(15.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.12),
+              offset: Offset(0, 4.h),
+              blurRadius: 8.r,
+            )
+          ],
+        ),
+        padding: EdgeInsets.symmetric(vertical: 14.h),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+                fontSize: 18.sp,
+                fontWeight: FontWeight.w600,
+                fontStyle: FontStyle.italic),
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildIntroSection() {
+    final screenWidth = MediaQuery.of(context).size.width;
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -239,14 +259,14 @@ class _AiAudiencePageState extends State<AiAudiencePage>
           Positioned(
             top: 0,
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(30.r),
+                bottomRight: Radius.circular(30.r),
               ),
               child: Image.asset(
                 'assets/b31d5472-09aa-4349-a81d-3ac90220f0d9.jpg',
-                height: 300,
-                width: MediaQuery.of(context).size.width,
+                height: 300.h,
+                width: screenWidth,
                 fit: BoxFit.cover,
               ),
             ),
@@ -256,21 +276,21 @@ class _AiAudiencePageState extends State<AiAudiencePage>
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              const Text(
+              Text(
                 "Welcome to AI\nAudience Platform !",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20.h),
               _optionCard("Diversity Simulation"),
               _optionCard("Dynamic Reaction"),
               _optionCard("Feedback Generator"),
               _optionCard("Challenge Mode"),
-              const SizedBox(height: 30),
+              SizedBox(height: 30.h),
               ElevatedButton(
                 onPressed: () {
                   setState(() => _showRecordingSection = true);
@@ -278,14 +298,13 @@ class _AiAudiencePageState extends State<AiAudiencePage>
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFFFF7A00),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 60, vertical: 14),
+                  padding: EdgeInsets.symmetric(horizontal: 60.w, vertical: 14.h),
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30)),
+                      borderRadius: BorderRadius.circular(30.r)),
                 ),
-                child: const Text(
+                child: Text(
                   "Get Started",
-                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  style: TextStyle(fontSize: 18.sp, color: Colors.white),
                 ),
               ),
               const Spacer(),
@@ -296,37 +315,38 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     );
   }
 
-  Widget _optionCard(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 6),
-      child: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFFE8FFFF),
-          borderRadius: BorderRadius.circular(15),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.12),
-              offset: const Offset(0, 4),
-              blurRadius: 8,
-            )
-          ],
-        ),
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        child: Center(
-          child: Text(
-            text,
-            style: const TextStyle(
-                fontSize: 18, fontWeight: FontWeight.w600, fontStyle: FontStyle.italic),
+  Widget _feedbackBubble(String text) {
+    final isPositive =
+        text.toLowerCase().contains('good') || text.toLowerCase().contains('well');
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.9),
+        borderRadius: BorderRadius.circular(15.r),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.account_circle,
+              color: isPositive ? Colors.green : Colors.red, size: 26.sp),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Text(
+              text,
+              style: TextStyle(
+                  fontSize: 16.sp, fontWeight: FontWeight.w500, color: Colors.black87),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  // ---------------------------------------------------------------------------
-  // UI SECTION: RECORDING PAGE
-  // ---------------------------------------------------------------------------
   Widget _buildRecordingSection() {
+    final screenW = MediaQuery.of(context).size.width;
+    final micBase = 110.w;
+    final micSize = micBase.clamp(72.w, screenW * 0.26);
+
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -347,21 +367,21 @@ class _AiAudiencePageState extends State<AiAudiencePage>
           _buildTopBar(),
           Column(
             children: [
-              const SizedBox(height: 120),
+              SizedBox(height: 120.h),
               Expanded(
                 child: _isLoadingFeedback
                     ? const Center(
                         child: CircularProgressIndicator(color: Colors.white),
                       )
                     : ListView.builder(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                         itemCount: _feedbackList.length,
                         itemBuilder: (context, index) =>
                             _feedbackBubble(_feedbackList[index]),
                       ),
               ),
               Padding(
-                padding: const EdgeInsets.only(bottom: 40),
+                padding: EdgeInsets.only(bottom: 40.h),
                 child: Column(
                   children: [
                     GestureDetector(
@@ -373,23 +393,25 @@ class _AiAudiencePageState extends State<AiAudiencePage>
                             colors: [Color(0xFFFF914D), Color(0xFFFF6D1A)],
                           ),
                         ),
-                        padding: const EdgeInsets.all(25),
+                        width: micSize,
+                        height: micSize,
+                        alignment: Alignment.center,
                         child: Icon(
                           _isRecording ? Icons.stop : Icons.mic,
                           color: Colors.white,
-                          size: 45,
+                          size: (micSize * 0.38).clamp(28.w, 48.w),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     Text(
                       _formatDuration(_recordDuration),
-                      style: const TextStyle(
+                      style: TextStyle(
                           color: Colors.white,
-                          fontSize: 22,
+                          fontSize: 22.sp,
                           fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                   ],
                 ),
               )
@@ -400,44 +422,17 @@ class _AiAudiencePageState extends State<AiAudiencePage>
     );
   }
 
-  Widget _feedbackBubble(String text) {
-    final isPositive =
-        text.toLowerCase().contains('good') || text.toLowerCase().contains('well');
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.account_circle,
-              color: isPositive ? Colors.green : Colors.red, size: 26),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ---------------------------------------------------------------------------
-  // BUILD
-  // ---------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 600),
-        child: _showRecordingSection
-            ? _buildRecordingSection()
-            : _buildIntroSection(),
+    return ScreenUtilInit(
+      designSize: const Size(360, 800),
+      builder: (_, __) => Scaffold(
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 600),
+          child: _showRecordingSection
+              ? _buildRecordingSection()
+              : _buildIntroSection(),
+        ),
       ),
     );
   }

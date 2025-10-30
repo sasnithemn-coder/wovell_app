@@ -104,14 +104,16 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
-    - assets/male_avatar.png
-    - assets/female_avatar.png
+    - assets/avatars/male_avatar.png
+    - assets/avatars/female_avatar.png
+    - assets/avatars/male_bust.png
+    - assets/avatars/female_bust.png
     - assets/public_speaking.jpg
     - assets/interview_skills.jpg
     - assets/dressing_sense.jpg
     - assets/ethics_etiquette.jpg
     - assets/sharpen_your_speech.png
-    - assets/public_speaking_banner.jpg
+    - assets/994c8127-2b6d-42b5-999b-e87a32286e7d.jpg
     - assets/voz_hut_banner.png
     - assets/speech_duty_banner.png
     - assets/b31d5472-09aa-4349-a81d-3ac90220f0d9.jpg

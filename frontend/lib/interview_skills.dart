@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
 import 'level_up_page.dart';
+import 'widgets/profile_avatar.dart';
+
 
 class InterviewSkillsPage extends StatelessWidget {
   const InterviewSkillsPage({super.key});
@@ -11,7 +14,6 @@ class InterviewSkillsPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Gradient background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -21,174 +23,161 @@ class InterviewSkillsPage extends StatelessWidget {
               ),
             ),
           ),
-
-          // Background image
           Image.asset(
             'assets/3fc84ffa-73ac-41f9-884b-2f4351b02513.jpg',
             fit: BoxFit.cover,
             width: double.infinity,
             height: double.infinity,
           ),
-
-          // Overlay color for clarity
           Container(color: Colors.black.withValues(alpha: 0.35)),
-
-          // Main content
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SafeArea(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   child: Row(
                     children: [
-                      // Back button
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
-                          padding: const EdgeInsets.all(6),
+                          padding: EdgeInsets.all(6.w),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.arrow_back_ios_new,
-                              color: Colors.white, size: 20),
+                          child: Icon(Icons.arrow_back_ios_new,
+                              color: Colors.white, size: 20.sp),
                         ),
                       ),
                       const Spacer(),
-
-                      // Notification button
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => const NotificationsPage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => const NotificationsPage()));
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: EdgeInsets.all(8.w),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.15),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.notifications_none,
-                              color: Colors.white, size: 22),
+                          child: Icon(Icons.notifications_none,
+                              color: Colors.white, size: 22.sp),
                         ),
                       ),
-                      const SizedBox(width: 12),
-
-                      // Profile icon
-                      GestureDetector(
+                      SizedBox(width: 12.w),
+                      ProfileAvatar(
+                        radius: 20, // keep the same as your current icon size
                         onTap: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (_) => const ProfilePage()));
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const ProfilePage()),
+                          );
                         },
-                        child: const CircleAvatar(
-                          radius: 18,
-                          backgroundImage: AssetImage('assets/avatar.png'),
-                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-
-              const SizedBox(height: 20),
-
-              // Title
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
+              SizedBox(height: 20.h),
+              Padding(
+                padding: EdgeInsets.only(left: 20.w),
                 child: Text(
                   "Interview Skills",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 26,
+                    fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-
-              const Padding(
-                padding: EdgeInsets.only(left: 20),
+              SizedBox(height: 8.h),
+              Padding(
+                padding: EdgeInsets.only(left: 20.w),
                 child: Text(
                   "Get ready to impress at every opportunity!",
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     height: 1.3,
                   ),
                 ),
               ),
-
-              const SizedBox(height: 30),
-
-              // Leaderboard & Bronze Progress Row
+              SizedBox(height: 30.h),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
                   children: [
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Leaderboard page coming soon!')),
+                            const SnackBar(
+                                content:
+                                    Text('Leaderboard page coming soon!')),
                           );
                         },
                         child: Container(
-                          height: 60,
+                          height: 60.h,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(15.r),
                           ),
-                          child: const Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.leaderboard, color: Colors.white),
-                                SizedBox(width: 8),
-                                Text(
-                                  "Leaderboard",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.leaderboard,
+                                  color: Colors.white, size: 22.sp),
+                              SizedBox(width: 8.w),
+                              Text(
+                                "Leaderboard",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Progress chart coming soon!')),
+                            const SnackBar(
+                                content:
+                                    Text('Progress chart coming soon!')),
                           );
                         },
                         child: Container(
-                          height: 60,
+                          height: 60.h,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.25),
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(15.r),
                           ),
-                          child: const Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.emoji_events, color: Colors.amber),
-                                SizedBox(width: 8),
-                                Text(
-                                  "Bronze",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(Icons.emoji_events,
+                                  color: Colors.amber, size: 22.sp),
+                              SizedBox(width: 8.w),
+                              Text(
+                                "Bronze",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w500,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -196,28 +185,23 @@ class InterviewSkillsPage extends StatelessWidget {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 25),
-
-              // Special Features Title
-              const Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 10),
+              SizedBox(height: 25.h),
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
                 child: Text(
                   "Special Features",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 20.sp,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
-
-              // Horizontal scrollable special features
               SizedBox(
-                height: 120,
+                height: 120.h,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                   children: const [
                     _FeatureCard(
                       title: "Mock Room",
@@ -248,10 +232,7 @@ class InterviewSkillsPage extends StatelessWidget {
                   ],
                 ),
               ),
-
               const Spacer(),
-
-              // Bottom illustration image and Level Up button
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -264,28 +245,30 @@ class InterviewSkillsPage extends StatelessWidget {
                 ),
                 child: Container(
                   color: Colors.white.withValues(alpha: 0.15),
-                  padding: const EdgeInsets.only(bottom: 30, top: 30),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 30.h, horizontal: 20.w),
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const LevelUpPage()),
+                          MaterialPageRoute(
+                              builder: (_) => const LevelUpPage()),
                         );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFF7A00),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 80, vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 80.w, vertical: 14.h),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
+                          borderRadius: BorderRadius.circular(30.r),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         "Level Up",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -301,9 +284,6 @@ class InterviewSkillsPage extends StatelessWidget {
   }
 }
 
-// ----------------------------------------------------
-// Feature Card Widget
-// ----------------------------------------------------
 class _FeatureCard extends StatelessWidget {
   final String title;
   final IconData icon;
@@ -320,31 +300,31 @@ class _FeatureCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 130,
-      margin: const EdgeInsets.only(right: 14),
+      width: 130.w,
+      margin: EdgeInsets.only(right: 14.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: color, width: 2),
+        borderRadius: BorderRadius.circular(15.r),
+        border: Border.all(color: color, width: 2.w),
         boxShadow: [
           BoxShadow(
             color: color.withValues(alpha: 0.2),
-            blurRadius: 10,
-            offset: const Offset(0, 6),
+            blurRadius: 10.r,
+            offset: Offset(0, 6.h),
           )
         ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: color, size: 30),
-          const SizedBox(height: 8),
+          Icon(icon, color: color, size: 30.sp),
+          SizedBox(height: 8.h),
           Text(
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontWeight: FontWeight.w600,
-              fontSize: 14,
+              fontSize: 14.sp,
               color: textColor ?? color,
             ),
           ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'models/user_progress.dart'; // ✅ adjust if your provider file is elsewhere
 import 'main_home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,10 +17,18 @@ class AvatarPage extends StatefulWidget {
 class _AvatarPageState extends State<AvatarPage> {
   String selectedGender = 'male';
 
+  // ✅ Returns the large preview avatar (full-body)
   String getAvatarImage() {
     return selectedGender == 'male'
-        ? 'assets/male_avatar.png'
-        : 'assets/female_avatar.png';
+        ? 'assets/avatars/male_avatar.png'
+        : 'assets/avatars/female_avatar.png';
+  }
+
+  // ✅ Returns the bust version to be saved & used everywhere else
+  String getBustImage() {
+    return selectedGender == 'male'
+        ? 'assets/avatars/male_bust.png'
+        : 'assets/avatars/female_bust.png';
   }
 
   @override
@@ -134,32 +144,20 @@ class _AvatarPageState extends State<AvatarPage> {
                         backgroundColor: const Color(0xFFFF7B00),
                       ),
                       onPressed: () async {
-                        try {
-                          final user = FirebaseAuth.instance.currentUser;
-                          if (user == null) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("User not signed in")),
-                            );
-                            return;
-                          }
+                        // ✅ Save the bust image path to provider
+                        final bustPath = getBustImage();
+                        await context
+                            .read<UserProgress>()
+                            .setAvatarBustPath(bustPath);
+                        print('✅ Saved avatar bust path: $bustPath');
 
-                          final avatarId = selectedGender == 'male' ? 'male_avatar.png' : 'female_avatar.png';
-
-                          // ✅ Save avatar choice to Firestore
-                          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-                            'avatarId': avatarId,
-                          });
-
-                          // ✅ Navigate to home
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => const MainHomePage()),
-                          );
-                        } catch (e) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text('Failed to save avatar: $e')),
-                          );
-                        }
+                        // ✅ Continue with existing navigation logic
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainHomePage(),
+                          ),
+                        );
                       },
 
                       child: Text(
