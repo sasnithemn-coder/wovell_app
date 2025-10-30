@@ -142,12 +142,30 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       children: [
                         SizedBox(height: 20.h),
+
+                        // ===== Avatar bust image with edit icon =====
                         Stack(
+                          alignment: Alignment.center,
                           children: [
-                            CircleAvatar(
-                              radius: 55.r,
-                              backgroundImage: const AssetImage(
-                                  'assets/avatar_male_medium_casual.png'),
+                            Consumer<UserProgress>(
+                              builder: (context, progress, _) {
+                                final avatarPath = progress.avatarBustPath;
+                                return CircleAvatar(
+                                  radius: 60.r,
+                                  backgroundColor: Colors.grey.shade200,
+                                  backgroundImage: avatarPath != null
+                                      ? (avatarPath.startsWith('assets/')
+                                          ? AssetImage(avatarPath)
+                                          : NetworkImage(avatarPath)
+                                              as ImageProvider)
+                                      : null,
+                                  child: avatarPath == null
+                                      ? Icon(Icons.person,
+                                          size: 60.sp,
+                                          color: Colors.grey.shade600)
+                                      : null,
+                                );
+                              },
                             ),
                             Positioned(
                               bottom: 0,
@@ -174,7 +192,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ],
                         ),
+
                         SizedBox(height: 10.h),
+
+                        // ===== User name + edit =====
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -197,7 +218,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         Text(
                           email,
                           style: TextStyle(
-                              color: Colors.grey, fontSize: 14.sp),
+                            color: Colors.grey,
+                            fontSize: 14.sp,
+                          ),
                         ),
                         SizedBox(height: 20.h),
 
@@ -233,8 +256,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           label: Text(
                             'Log out',
                             style: TextStyle(
-                                fontSize: 16.sp,
-                                color: const Color(0xFF1A3A5C)),
+                              fontSize: 16.sp,
+                              color: const Color(0xFF1A3A5C),
+                            ),
                           ),
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
@@ -254,8 +278,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               color: Colors.white, size: 20.sp),
                           label: Text(
                             'Delete Account',
-                            style:
-                                TextStyle(fontSize: 16.sp, color: Colors.white),
+                            style: TextStyle(
+                              fontSize: 16.sp,
+                              color: Colors.white,
+                            ),
                           ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.redAccent,

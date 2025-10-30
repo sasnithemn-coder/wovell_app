@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProgress extends ChangeNotifier {
   // Example progress data (0–100)
@@ -9,12 +10,32 @@ class UserProgress extends ChangeNotifier {
     'Dressing Sense': 90,
   };
 
+  // --- NEW: Avatar bust path ---
+  String? _avatarBustPath;
+  String? get avatarBustPath => _avatarBustPath;
+
   void updateProgress(String category, int value) {
     progress[category] = value.clamp(0, 100);
-    notifyListeners(); // Notifies all listening widgets
+    notifyListeners();
   }
 
   int getProgress(String category) {
     return progress[category] ?? 0;
+  }
+
+  // --- NEW: Save selected avatar bust ---
+  Future<void> setAvatarBustPath(String path) async {
+    _avatarBustPath = path;
+    notifyListeners();
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('avatarBustPath', path);
+  }
+
+  // --- NEW: Load avatar at app start ---
+  Future<void> loadAvatarBustPath() async {
+    final prefs = await SharedPreferences.getInstance();
+    _avatarBustPath = prefs.getString('avatarBustPath');
+    notifyListeners();
   }
 }

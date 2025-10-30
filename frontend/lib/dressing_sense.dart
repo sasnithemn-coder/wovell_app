@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
 import 'level_up_page.dart';
+import 'widgets/profile_avatar.dart'; // ✅ Added reusable avatar component
 
 class DressingSensePage extends StatelessWidget {
   const DressingSensePage({super.key});
@@ -12,7 +13,7 @@ class DressingSensePage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background gradient
+          // ===== Background gradient =====
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -23,7 +24,7 @@ class DressingSensePage extends StatelessWidget {
             ),
           ),
 
-          // Background image
+          // ===== Background image =====
           Image.asset(
             'assets/bfa234e0-a9c2-4278-9ced-ee29afe9faba.jpg',
             fit: BoxFit.cover,
@@ -31,10 +32,10 @@ class DressingSensePage extends StatelessWidget {
             height: double.infinity,
           ),
 
-          // Overlay
+          // ===== Overlay =====
           Container(color: Colors.black.withValues(alpha: 0.35)),
 
-          // Main content
+          // ===== Main Content =====
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -44,7 +45,7 @@ class DressingSensePage extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   child: Row(
                     children: [
-                      // Back button
+                      // ===== Back button =====
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
@@ -57,15 +58,17 @@ class DressingSensePage extends StatelessWidget {
                               color: Colors.white, size: 20.sp),
                         ),
                       ),
+
                       const Spacer(),
 
-                      // Notifications
+                      // ===== Notifications =====
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const NotificationsPage()),
+                              builder: (_) => const NotificationsPage(),
+                            ),
                           );
                         },
                         child: Container(
@@ -78,22 +81,20 @@ class DressingSensePage extends StatelessWidget {
                               color: Colors.white, size: 22.sp),
                         ),
                       ),
+
                       SizedBox(width: 12.w),
 
-                      // Profile
+                      // ===== Dynamic Profile Avatar (bust) =====
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (_) => const ProfilePage()),
+                              builder: (_) => const ProfilePage(),
+                            ),
                           );
                         },
-                        child: CircleAvatar(
-                          radius: 18.r,
-                          backgroundImage:
-                              const AssetImage('assets/avatar.png'),
-                        ),
+                        child: const ProfileAvatar(radius: 18), // ✅ added here
                       ),
                     ],
                   ),
@@ -102,7 +103,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 20.h),
 
-              // Title
+              // ===== Title =====
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -118,7 +119,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 10.h),
 
-              // Subtitle
+              // ===== Subtitle =====
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -133,7 +134,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 30.h),
 
-              // Leaderboard & Bronze section
+              // ===== Leaderboard & Bronze Section =====
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
@@ -212,7 +213,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 25.h),
 
-              // Special Features title
+              // ===== Special Features Title =====
               Padding(
                 padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
                 child: Text(
@@ -225,7 +226,7 @@ class DressingSensePage extends StatelessWidget {
                 ),
               ),
 
-              // Horizontal scrollable feature list
+              // ===== Horizontal Scrollable Feature List =====
               SizedBox(
                 height: 120.h,
                 child: ListView(
@@ -263,7 +264,7 @@ class DressingSensePage extends StatelessWidget {
 
               const Spacer(),
 
-              // Bottom illustration with Level Up button
+              // ===== Bottom Illustration + Level Up Button =====
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -283,13 +284,16 @@ class DressingSensePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => const LevelUpPage()),
+                            builder: (_) => const LevelUpPage(),
+                          ),
                         );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFFF7A00),
                         padding: EdgeInsets.symmetric(
-                            horizontal: 80.w, vertical: 14.h),
+                          horizontal: 80.w,
+                          vertical: 14.h,
+                        ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30.r),
                         ),
@@ -314,9 +318,7 @@ class DressingSensePage extends StatelessWidget {
   }
 }
 
-// ----------------------------------------------
-// Responsive Feature Card Widget
-// ----------------------------------------------
+// ===== Feature Card Widget =====
 class _FeatureCard extends StatelessWidget {
   final String title;
   final IconData icon;

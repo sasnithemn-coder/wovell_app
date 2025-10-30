@@ -100,8 +100,10 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
   assets:
-    - assets/male_avatar.png
-    - assets/female_avatar.png
+    - assets/avatars/male_avatar.png
+    - assets/avatars/female_avatar.png
+    - assets/avatars/male_bust.png
+    - assets/avatars/female_bust.png
     - assets/public_speaking.jpg
     - assets/interview_skills.jpg
     - assets/dressing_sense.jpg
