@@ -95,7 +95,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     children: [
                       SizedBox(height: 60.h),
                       Text(
-                        'Welcome Back !',
+                        'Welcome \nBack !',
                         style: TextStyle(
                           fontSize: 44.sp,
                           fontWeight: FontWeight.bold,
