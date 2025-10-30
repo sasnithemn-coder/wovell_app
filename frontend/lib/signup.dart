@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'signin.dart';
@@ -65,26 +67,41 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return;
     }
 
-    if (!_isValidEmail(email)) {
-      _showMessage('Please enter a valid email');
-      return;
-    }
+  if (password != confirmPassword) {
+    _showErrorMessage('Passwords do not match');
+    return;
+  }
 
-    if (password.length < 6) {
-      _showMessage('Password must be at least 6 characters');
-      return;
-    }
+  try {
+    // 🔥 Create user with Firebase
+    final credential = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
 
-    if (password != confirmPassword) {
-      _showMessage('Passwords do not match');
-      return;
-    }
+    final uid = credential.user!.uid;
 
+    // 🧠 Store basic user info in Firestore
+await FirebaseFirestore.instance.collection('users').doc(uid).set({
+  'uid': uid,
+  'email': email,
+  'name': _nameController.text.trim(), // ✅ get actual user input
+  'avatarId': '',
+  'currentLevel': {'publicSpeaking': 1},
+  'progress': {'publicSpeaking': 0, 'totalSP': 0},
+});
+
+
+    // ✅ Navigate to home (then avatar selection happens automatically)
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      MaterialPageRoute(builder: (context) => const AvatarPage()),
     );
+  } catch (e) {
+    _showErrorMessage('Signup failed: ${e.toString()}');
   }
+}
+bool _isValidEmail(String email) {
+  return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+}
 
   bool _isValidEmail(String email) =>
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);

@@ -58,6 +58,8 @@ class _SignInScreenState extends State<SignInScreen> {
       MaterialPageRoute(builder: (_) => const MainHomePage()),
     );
   }
+}
+
 
   bool _isValidEmail(String email) =>
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
