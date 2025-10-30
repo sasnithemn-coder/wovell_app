@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'signup.dart';
 import 'main_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'avatar.dart';
+
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -15,25 +19,75 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
 
-  void _signIn() {
-    String email = _emailController.text.trim();
-    String password = _passwordController.text.trim();
+void _signIn() async {
+  final email = _emailController.text.trim();
+  final password = _passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
-      _showMessage('Please fill in all fields');
-      return;
-    }
-
-    if (!_isValidEmail(email)) {
-      _showMessage('Please enter a valid email');
-      return;
-    }
-
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const MainHomePage()),
-    );
+  if (email.isEmpty || password.isEmpty) {
+    _showMessage('Please fill in all fields');
+    return;
   }
+
+  if (!_isValidEmail(email)) {
+    _showMessage('Please enter a valid email');
+    return;
+  }
+
+  try {
+    // Sign in with Firebase Auth
+    final userCred = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password);
+
+    final uid = userCred.user!.uid;
+
+    // Fetch user doc from Firestore
+    final doc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get();
+
+    if (!doc.exists) {
+      // Create a minimal profile if missing
+      await FirebaseFirestore.instance.collection('users').doc(uid).set({
+        'uid': uid,
+        'email': email,
+        'name': '',
+        'avatarId': '',
+        'currentLevel': {'publicSpeaking': 1},
+        'progress': {'publicSpeaking': 0, 'totalSP': 0},
+      });
+
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AvatarPage()),
+      );
+      return;
+    }
+
+    final data = doc.data()!;
+    final avatarId = (data['avatarId'] ?? '') as String;
+
+    if (avatarId.isNotEmpty) {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const MainHomePage()),
+      );
+    } else {
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const AvatarPage()),
+      );
+    }
+  } on FirebaseAuthException catch (e) {
+    _showMessage(e.message ?? 'Sign in failed');
+  } catch (e) {
+    _showMessage('Sign in error: ${e.toString()}');
+  }
+}
+
 
   bool _isValidEmail(String email) {
     return RegExp(r'^[\w\.-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);

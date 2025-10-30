@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'main_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AvatarPage extends StatefulWidget {
   const AvatarPage({super.key});
@@ -130,13 +133,35 @@ class _AvatarPageState extends State<AvatarPage> {
                         ),
                         backgroundColor: const Color(0xFFFF7B00),
                       ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MainHomePage()),
-                        );
+                      onPressed: () async {
+                        try {
+                          final user = FirebaseAuth.instance.currentUser;
+                          if (user == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("User not signed in")),
+                            );
+                            return;
+                          }
+
+                          final avatarId = selectedGender == 'male' ? 'male_avatar.png' : 'female_avatar.png';
+
+                          // ✅ Save avatar choice to Firestore
+                          await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+                            'avatarId': avatarId,
+                          });
+
+                          // ✅ Navigate to home
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => const MainHomePage()),
+                          );
+                        } catch (e) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Failed to save avatar: $e')),
+                          );
+                        }
                       },
+
                       child: Text(
                         'Select',
                         style: TextStyle(

@@ -185,7 +185,7 @@ class _VozHutPageState extends State<VozHutPage> {
                             ),
                           ),
                         ),
-                        ..._history.map((h) => _HistoryTile(entry: h)).toList(),
+                        ..._history.map((h) => _HistoryTile(entry: h)),
                       ],
                       SizedBox(height: 20.h),
                     ],
@@ -205,7 +205,7 @@ class _TopicCard extends StatelessWidget {
   final String level;
   final VoidCallback onStart;
   const _TopicCard(
-      {required this.title, required this.level, required this.onStart, super.key});
+      {required this.title, required this.level, required this.onStart});
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +263,7 @@ class _TopicCard extends StatelessWidget {
 
 class _HistoryTile extends StatelessWidget {
   final Map<String, dynamic> entry;
-  const _HistoryTile({required this.entry, super.key});
+  const _HistoryTile({required this.entry});
 
   @override
   Widget build(BuildContext context) {
