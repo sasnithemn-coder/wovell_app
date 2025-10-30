@@ -70,6 +70,8 @@ class _SignInScreenState extends State<SignInScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
+        width: double.infinity,
+        height: double.infinity, // 🩵 ensures full gradient coverage
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
@@ -80,104 +82,114 @@ class _SignInScreenState extends State<SignInScreen> {
         child: SafeArea(
           child: SingleChildScrollView(
             controller: _scrollController,
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 60.h),
-                Text(
-                  'Welcome Back!',
-                  style: TextStyle(
-                    fontSize: 44.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Text(
-                  'Sign in to continue your journey.',
-                  style: TextStyle(fontSize: 16.sp, color: Colors.white70),
-                ),
-                SizedBox(height: 30.h),
-                Container(
-                  padding: EdgeInsets.all(24.w),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF5F5F5),
-                    borderRadius: BorderRadius.circular(30.r),
-                  ),
+            physics: const BouncingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height, // 🩵 fixes gap
+              ),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildTextField(
-                        label: 'Email',
-                        hint: 'Enter your email',
-                        controller: _emailController,
-                        focusNode: _emailFocus,
-                        isEmail: true,
-                      ),
-                      SizedBox(height: 20.h),
-                      _buildPasswordField(
-                        label: 'Password',
-                        hint: 'Enter your password',
-                        controller: _passwordController,
-                        obscure: _obscurePassword,
-                        toggle: () => setState(
-                            () => _obscurePassword = !_obscurePassword),
-                        focusNode: _passwordFocus,
-                      ),
-                      SizedBox(height: 30.h),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56.h,
-                        child: ElevatedButton(
-                          onPressed: _signIn,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFFFF8C42),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(28.r),
-                            ),
-                          ),
-                          child: Text(
-                            'SIGN IN',
-                            style: TextStyle(
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
+                      SizedBox(height: 60.h),
+                      Text(
+                        'Welcome Back !',
+                        style: TextStyle(
+                          fontSize: 44.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
                       ),
-                      SizedBox(height: 24.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Don't have an account?",
-                            style: TextStyle(
-                                color: Colors.black87, fontSize: 14.sp),
-                          ),
-                          TextButton(
-                            onPressed: () => Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const SignUpScreen()),
+                      SizedBox(height: 10.h),
+                      Text(
+                        'Sign in to continue your journey.',
+                        style: TextStyle(fontSize: 16.sp, color: Colors.white70),
+                      ),
+                      SizedBox(height: 30.h),
+                      Container(
+                        padding: EdgeInsets.all(24.w),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.circular(30.r),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildTextField(
+                              label: 'Email',
+                              hint: 'Enter your email',
+                              controller: _emailController,
+                              focusNode: _emailFocus,
+                              isEmail: true,
                             ),
-                            child: Text(
-                              'Sign up',
-                              style: TextStyle(
-                                color: const Color(0xFF1A3A5C),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14.sp,
+                            SizedBox(height: 20.h),
+                            _buildPasswordField(
+                              label: 'Password',
+                              hint: 'Enter your password',
+                              controller: _passwordController,
+                              obscure: _obscurePassword,
+                              toggle: () => setState(
+                                  () => _obscurePassword = !_obscurePassword),
+                              focusNode: _passwordFocus,
+                            ),
+                            SizedBox(height: 30.h),
+                            SizedBox(
+                              width: double.infinity,
+                              height: 56.h,
+                              child: ElevatedButton(
+                                onPressed: _signIn,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFFFF8C42),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(28.r),
+                                  ),
+                                ),
+                                child: Text(
+                                  'SIGN IN',
+                                  style: TextStyle(
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 24.h),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Don't have an account?",
+                                  style: TextStyle(
+                                      color: Colors.black87, fontSize: 14.sp),
+                                ),
+                                TextButton(
+                                  onPressed: () => Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const SignUpScreen()),
+                                  ),
+                                  child: Text(
+                                    'Sign up',
+                                    style: TextStyle(
+                                      color: const Color(0xFF1A3A5C),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
+                      SizedBox(height: 20.h),
                     ],
                   ),
                 ),
-                SizedBox(height: 20.h),
-              ],
+              ),
             ),
           ),
         ),
