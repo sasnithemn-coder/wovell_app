@@ -71,7 +71,7 @@ class InterviewSkillsPage extends StatelessWidget {
                       ),
                       SizedBox(width: 12.w),
                       ProfileAvatar(
-                        radius: 20, // keep the same as your current icon size
+                        radius: 20, 
                         onTap: () {
                           Navigator.push(
                             context,

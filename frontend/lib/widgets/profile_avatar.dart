@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../models/user_progress.dart'; // adjust path if needed
+import '../models/user_progress.dart'; 
 
 class ProfileAvatar extends StatelessWidget {
   final double radius;

@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
 import 'level_up_page.dart';
-import 'widgets/profile_avatar.dart'; // ✅ Added reusable avatar component
+import 'widgets/profile_avatar.dart'; 
 
 class DressingSensePage extends StatelessWidget {
   const DressingSensePage({super.key});
@@ -13,7 +13,6 @@ class DressingSensePage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // ===== Background gradient =====
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -24,7 +23,6 @@ class DressingSensePage extends StatelessWidget {
             ),
           ),
 
-          // ===== Background image =====
           Image.asset(
             'assets/bfa234e0-a9c2-4278-9ced-ee29afe9faba.jpg',
             fit: BoxFit.cover,
@@ -32,10 +30,7 @@ class DressingSensePage extends StatelessWidget {
             height: double.infinity,
           ),
 
-          // ===== Overlay =====
           Container(color: Colors.black.withValues(alpha: 0.35)),
-
-          // ===== Main Content =====
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,7 +40,7 @@ class DressingSensePage extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   child: Row(
                     children: [
-                      // ===== Back button =====
+                      // Back button
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
@@ -61,7 +56,7 @@ class DressingSensePage extends StatelessWidget {
 
                       const Spacer(),
 
-                      // ===== Notifications =====
+                      // Notifications 
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -84,7 +79,7 @@ class DressingSensePage extends StatelessWidget {
 
                       SizedBox(width: 12.w),
 
-                      // ===== Dynamic Profile Avatar (bust) =====
+                      // Profile Avatar (bust only) 
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -103,7 +98,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 20.h),
 
-              // ===== Title =====
+              // Title 
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -119,7 +114,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 10.h),
 
-              // ===== Subtitle =====
+              // Subtitle
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -134,7 +129,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 30.h),
 
-              // ===== Leaderboard & Bronze Section =====
+              // Leaderboard & Medal Buttons
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
@@ -213,7 +208,7 @@ class DressingSensePage extends StatelessWidget {
 
               SizedBox(height: 25.h),
 
-              // ===== Special Features Title =====
+              // Special Features 
               Padding(
                 padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
                 child: Text(
@@ -226,7 +221,6 @@ class DressingSensePage extends StatelessWidget {
                 ),
               ),
 
-              // ===== Horizontal Scrollable Feature List =====
               SizedBox(
                 height: 120.h,
                 child: ListView(
@@ -264,7 +258,7 @@ class DressingSensePage extends StatelessWidget {
 
               const Spacer(),
 
-              // ===== Bottom Illustration + Level Up Button =====
+              // Level Up Button 
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -318,7 +312,7 @@ class DressingSensePage extends StatelessWidget {
   }
 }
 
-// ===== Feature Card Widget =====
+// Feature Card Widget 
 class _FeatureCard extends StatelessWidget {
   final String title;
   final IconData icon;

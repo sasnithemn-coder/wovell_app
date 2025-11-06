@@ -28,7 +28,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     super.initState();
 
-    // 🧭 Automatically scroll to password fields when focused
     _passwordFocusNode.addListener(() {
       if (_passwordFocusNode.hasFocus) {
         _scrollToField();
@@ -131,7 +130,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: 30.h),
 
-                // 🧱 Form container
                 Container(
                   padding: EdgeInsets.all(24.w),
                   decoration: BoxDecoration(
@@ -178,7 +176,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SizedBox(height: 32.h),
 
-                      // 🟧 Sign Up Button
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
@@ -202,7 +199,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       SizedBox(height: 24.h),
 
-                      // 🔁 Redirect to Sign In
+                      // Redirect to Sign In
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

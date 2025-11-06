@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'signup.dart';
-import 'main_home.dart'; // ✅ direct redirect here
+import 'main_home.dart'; 
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -52,7 +52,6 @@ class _SignInScreenState extends State<SignInScreen> {
       return;
     }
 
-    // ✅ Redirect directly to MainHomePage
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const MainHomePage()),
@@ -71,7 +70,7 @@ class _SignInScreenState extends State<SignInScreen> {
       resizeToAvoidBottomInset: true,
       body: Container(
         width: double.infinity,
-        height: double.infinity, // 🩵 ensures full gradient coverage
+        height: double.infinity, 
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
@@ -85,7 +84,7 @@ class _SignInScreenState extends State<SignInScreen> {
             physics: const BouncingScrollPhysics(),
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height, // 🩵 fixes gap
+                minHeight: MediaQuery.of(context).size.height, 
               ),
               child: IntrinsicHeight(
                 child: Padding(
