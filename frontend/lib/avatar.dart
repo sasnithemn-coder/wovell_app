@@ -3,6 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'models/user_progress.dart'; 
 import 'main_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AvatarPage extends StatefulWidget {
   const AvatarPage({super.key});
@@ -154,6 +157,7 @@ class _AvatarPageState extends State<AvatarPage> {
                           ),
                         );
                       },
+
                       child: Text(
                         'Select',
                         style: TextStyle(

@@ -57,12 +57,24 @@ class _SignInScreenState extends State<SignInScreen> {
       MaterialPageRoute(builder: (_) => const MainHomePage()),
     );
   }
-
+  
   bool _isValidEmail(String email) =>
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
 
   void _showMessage(String msg) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocus.removeListener(_scrollToField);
+    _passwordFocus.removeListener(_scrollToField);
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

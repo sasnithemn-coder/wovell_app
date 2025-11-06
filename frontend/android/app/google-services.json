@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "820472487227",
+    "project_id": "wovell-1ea6e",
+    "storage_bucket": "wovell-1ea6e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:820472487227:android:3f69d9c624276af3216b1e",
+        "android_client_info": {
+          "package_name": "com.example.wovell_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDkiNDJfbFYx-_2cqmgfRILnZ38FBUYpRs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
