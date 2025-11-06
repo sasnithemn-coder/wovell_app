@@ -20,7 +20,6 @@ class PublicSpeakingPage extends StatelessWidget {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Gradient background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -31,7 +30,6 @@ class PublicSpeakingPage extends StatelessWidget {
             ),
           ),
 
-          // Background image overlay
           Image.asset(
             'assets/994c8127-2b6d-42b5-999b-e87a32286e7d.jpg',
             fit: BoxFit.cover,
@@ -40,18 +38,16 @@ class PublicSpeakingPage extends StatelessWidget {
           ),
           Container(color: Colors.black.withValues(alpha: 0.35)),
 
-          // Main content
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ====== TOP NAV BAR ======
+              // Top Bar, Notifications & Profile
               SafeArea(
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   child: Row(
                     children: [
-                      // Drawer Menu Button
                       Builder(
                         builder: (context) => GestureDetector(
                           onTap: () => Scaffold.of(context).openDrawer(),
@@ -67,8 +63,6 @@ class PublicSpeakingPage extends StatelessWidget {
                         ),
                       ),
                       const Spacer(),
-
-                      // Notifications
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -88,8 +82,6 @@ class PublicSpeakingPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(width: 12.w),
-
-                      // Profile
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -111,7 +103,7 @@ class PublicSpeakingPage extends StatelessWidget {
 
               SizedBox(height: 20.h),
 
-              // ====== TITLE ======
+              // Title
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -127,7 +119,7 @@ class PublicSpeakingPage extends StatelessWidget {
 
               SizedBox(height: 10.h),
 
-              // ====== SUBTITLE ======
+              // Subtitle
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -142,7 +134,7 @@ class PublicSpeakingPage extends StatelessWidget {
 
               SizedBox(height: 30.h),
 
-              // ====== BRONZE + LEADERBOARD ROW ======
+              // Leaderboard & Medals Row
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
@@ -190,7 +182,7 @@ class PublicSpeakingPage extends StatelessWidget {
                                     ),
                                     child: FractionallySizedBox(
                                       alignment: Alignment.centerLeft,
-                                      widthFactor: 0.6, // progress %
+                                      widthFactor: 0.6, 
                                       child: Container(
                                         decoration: BoxDecoration(
                                           color: Colors.orangeAccent,
@@ -251,7 +243,7 @@ class PublicSpeakingPage extends StatelessWidget {
 
               SizedBox(height: 25.h),
 
-              // ====== SPECIAL FEATURES TITLE ======
+              // Speacial Features 
               Padding(
                 padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
                 child: Text(
@@ -264,7 +256,6 @@ class PublicSpeakingPage extends StatelessWidget {
                 ),
               ),
 
-              // ====== HORIZONTAL FEATURE SCROLL ======
               SizedBox(
                 height: 120.h,
                 child: ListView(
@@ -335,7 +326,7 @@ class PublicSpeakingPage extends StatelessWidget {
 
               const Spacer(),
 
-              // ====== BOTTOM IMAGE + LEVEL UP BUTTON ======
+              // Level Up Button
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -388,9 +379,7 @@ class PublicSpeakingPage extends StatelessWidget {
   }
 }
 
-// ----------------------------------------------------
 // Feature Card Widget
-// ----------------------------------------------------
 class _FeatureCard extends StatelessWidget {
   final String title;
   final IconData icon;

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'signin.dart';
-import 'home.dart';
+import 'avatar.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -30,7 +30,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void initState() {
     super.initState();
 
-    // 🧭 Automatically scroll to password fields when focused
     _passwordFocusNode.addListener(() {
       if (_passwordFocusNode.hasFocus) {
         _scrollToField();
@@ -56,7 +55,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
   }
 
-  void _signUp() {
+  Future<void> _signUp() async {
     final name = _nameController.text.trim();
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
@@ -73,24 +72,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   try {
-    // 🔥 Create user with Firebase
+    // Create user with Firebase
     final credential = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
 
     final uid = credential.user!.uid;
 
-    // 🧠 Store basic user info in Firestore
+    // Store basic user info in Firestore
 await FirebaseFirestore.instance.collection('users').doc(uid).set({
   'uid': uid,
   'email': email,
-  'name': _nameController.text.trim(), // ✅ get actual user input
+  'name': _nameController.text.trim(), 
   'avatarId': '',
   'currentLevel': {'publicSpeaking': 1},
   'progress': {'publicSpeaking': 0, 'totalSP': 0},
 });
 
 
-    // ✅ Navigate to home (then avatar selection happens automatically)
+    // Navigate to home 
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const AvatarPage()),
@@ -98,16 +97,32 @@ await FirebaseFirestore.instance.collection('users').doc(uid).set({
   } catch (e) {
     _showErrorMessage('Signup failed: ${e.toString()}');
   }
-}
-bool _isValidEmail(String email) {
-  return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
-}
+  }
 
   bool _isValidEmail(String email) =>
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
 
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  void _showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.redAccent,
+    ));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    super.dispose();
   }
 
   @override
@@ -148,7 +163,6 @@ bool _isValidEmail(String email) {
                 ),
                 SizedBox(height: 30.h),
 
-                // 🧱 Form container
                 Container(
                   padding: EdgeInsets.all(24.w),
                   decoration: BoxDecoration(
@@ -195,7 +209,6 @@ bool _isValidEmail(String email) {
                       ),
                       SizedBox(height: 32.h),
 
-                      // 🟧 Sign Up Button
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
@@ -219,7 +232,7 @@ bool _isValidEmail(String email) {
                       ),
                       SizedBox(height: 24.h),
 
-                      // 🔁 Redirect to Sign In
+                      // Redirect to Sign In
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

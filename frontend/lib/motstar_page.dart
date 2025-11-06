@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile_page.dart';
 import 'notifications.dart';
+import 'widgets/profile_avatar.dart';
 
 class MOTstarPage extends StatefulWidget {
   const MOTstarPage({super.key});
@@ -172,7 +173,7 @@ class _MOTstarPageState extends State<MOTstarPage> {
         child: SafeArea(
           child: Column(
             children: [
-              // ===== Top Bar =====
+              // Top Bar with Back, Title, Notifications & Profile Avatar
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
                 child: Row(
@@ -213,18 +214,22 @@ class _MOTstarPageState extends State<MOTstarPage> {
                                 builder: (c) => const ProfilePage()),
                           );
                         },
-                        child: CircleAvatar(
-                          radius: 16.r,
-                          backgroundImage: const AssetImage(
-                              'assets/avatar_male_medium_casual.png'),
-                        ),
+                        child: 
+                          ProfileAvatar(
+                            radius: 20, 
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                  MaterialPageRoute(builder: (context) => const ProfilePage()),
+                              );
+                            },
+                          ),
                       ),
                     ])
                   ],
                 ),
               ),
 
-              // ===== Golden Header =====
               Container(
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(vertical: 30.h),
@@ -258,7 +263,6 @@ class _MOTstarPageState extends State<MOTstarPage> {
                 ),
               ),
 
-              // ===== Scrollable Section =====
               Expanded(
                 child: SingleChildScrollView(
                   padding: EdgeInsets.all(16.w),
@@ -286,7 +290,7 @@ class _MOTstarPageState extends State<MOTstarPage> {
     );
   }
 
-  // ===== WIDGETS =====
+  // Widgets
   Widget _buildMOTCard({
     required String title,
     required String word,

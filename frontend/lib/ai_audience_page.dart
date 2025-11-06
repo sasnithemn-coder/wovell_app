@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:record/record.dart';
 import 'package:http/http.dart' as http;
-
 import 'notifications.dart';
 import 'profile_page.dart';
 

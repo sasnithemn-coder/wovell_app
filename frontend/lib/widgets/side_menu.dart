@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../main_home.dart';
 import '../settings.dart';
 import '../profile_page.dart';
+import 'profile_avatar.dart';
 
 class SideMenu extends StatelessWidget {
   const SideMenu({super.key});
@@ -21,21 +22,19 @@ class SideMenu extends StatelessWidget {
       elevation: 0,
       child: Stack(
         children: [
-          // 🔹 Gradient Background
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Color(0xFFD0D9D8), // Light grey-teal tone
-                  Color(0xFF7EC6C3), // Teal-ish blue
+                  Color(0xFFD0D9D8), 
+                  Color(0xFF7EC6C3), 
                 ],
               ),
             ),
           ),
 
-          // 🔹 Glassmorphism Effect
           BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
             child: Container(
@@ -43,20 +42,23 @@ class SideMenu extends StatelessWidget {
             ),
           ),
 
-          // 🔹 Drawer Content
           SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 32.h, horizontal: 20.w),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 🧍‍♂️ Avatar & Welcome Text
+                  // Avatar & Welcome Text
                   Row(
                     children: [
-                      CircleAvatar(
-                        radius: 28.r,
-                        backgroundImage: const AssetImage(
-                            'assets/avatar_male_medium_casual.png'),
+                      ProfileAvatar(
+                          radius: 20, 
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                                MaterialPageRoute(builder: (context) => const ProfilePage()),
+                            );
+                          },
                       ),
                       SizedBox(width: 12.w),
                       Text(
@@ -71,7 +73,7 @@ class SideMenu extends StatelessWidget {
                   ),
                   SizedBox(height: 40.h),
 
-                  // 🔹 Menu Items
+                  // Menu Items
                   _buildMenuItem(
                     icon: Icons.home,
                     title: 'Home',
@@ -129,7 +131,7 @@ class SideMenu extends StatelessWidget {
 
                   const Spacer(),
 
-                  // 🔹 Footer / App Info
+                  // App Version
                   Center(
                     child: Column(
                       children: [
@@ -155,7 +157,7 @@ class SideMenu extends StatelessWidget {
     );
   }
 
-  // 🔸 Menu Item Widget
+  // Menu Item Widget
   Widget _buildMenuItem({
     required IconData icon,
     required String title,
@@ -183,7 +185,7 @@ class SideMenu extends StatelessWidget {
     );
   }
 
-  // 🔸 Toast Message Helper
+  // Toast Message Helper
   void _showMessage(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));

@@ -13,8 +13,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String userName = 'Steven Smith';
-  String email = 'iit@gmail.com';
+  String userName = 'Dinura';
+  String email = 'dinura@gmail.com';
   final TextEditingController _nameController = TextEditingController();
 
   void _editName() {
@@ -102,7 +102,6 @@ class _ProfilePageState extends State<ProfilePage> {
         child: SafeArea(
           child: Column(
             children: [
-              // ===== Top Bar =====
               Padding(
                 padding:
                     EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
@@ -126,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
 
-              // ===== Avatar & Name Section =====
+              // Avatar & Name Section 
               Expanded(
                 child: Container(
                   width: double.infinity,
@@ -143,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       children: [
                         SizedBox(height: 20.h),
 
-                        // ===== Avatar bust image with edit icon =====
+                        // Avatar bust image with edit icon 
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -195,7 +194,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                         SizedBox(height: 10.h),
 
-                        // ===== User name + edit =====
+                        // User name + edit 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -224,7 +223,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(height: 20.h),
 
-                        // ===== Stats Row =====
+                        // Stats Row
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: const [
@@ -235,7 +234,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(height: 20.h),
 
-                        // ===== Progress Cards =====
+                        // Progress Chart
                         ...userProgress.progress.entries.map((entry) {
                           return Padding(
                             padding: EdgeInsets.symmetric(vertical: 8.h),
@@ -248,7 +247,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
                         SizedBox(height: 20.h),
 
-                        // ===== Logout Button =====
+                        // Logout Button
                         ElevatedButton.icon(
                           onPressed: _logout,
                           icon: Icon(Icons.logout_rounded,
@@ -271,7 +270,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         SizedBox(height: 10.h),
 
-                        // ===== Delete Account Button =====
+                        // Delete Account Button
                         ElevatedButton.icon(
                           onPressed: _deleteAccount,
                           icon: Icon(Icons.delete_outline,
@@ -305,7 +304,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-// ===== Stat Display Widget =====
+// Stat Display Widget 
 class _StatItem extends StatelessWidget {
   final String label;
   final String value;
@@ -332,7 +331,7 @@ class _StatItem extends StatelessWidget {
   }
 }
 
-// ===== Progress Card Widget =====
+// Progress Card Widget 
 class _ProgressCard extends StatelessWidget {
   final String title;
   final int progress;

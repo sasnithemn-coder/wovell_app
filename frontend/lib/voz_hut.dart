@@ -1,4 +1,3 @@
-// lib/voz_hut.dart
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -80,7 +79,6 @@ class _VozHutPageState extends State<VozHutPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Ensure ScreenUtil is initialized in main.dart. This file assumes it is.
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(

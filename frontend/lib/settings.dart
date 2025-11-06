@@ -12,7 +12,7 @@ class SettingsPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // ===== TOP BAR =====
+            // Top Bar with Back Button, Notifications & Profile Avatar
             Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -39,7 +39,6 @@ class SettingsPage extends StatelessWidget {
               ),
             ),
 
-            // ===== USER PROFILE CARD =====
             Padding(
               padding:
                   EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -65,7 +64,7 @@ class SettingsPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Steven Smith',
+                              'Dinura',
                               style: TextStyle(
                                 fontSize: 18.sp,
                                 color: Colors.white,
@@ -74,7 +73,7 @@ class SettingsPage extends StatelessWidget {
                             ),
                             SizedBox(height: 4.h),
                             Text(
-                              'iit@gmail.com',
+                              'dinura@gmail.com',
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 color: Colors.white70,
@@ -91,7 +90,7 @@ class SettingsPage extends StatelessWidget {
 
             SizedBox(height: 10.h),
 
-            // ===== SCROLLABLE SETTINGS LIST =====
+            // Settings
             Expanded(
               child: ListView(
                 padding:
@@ -151,7 +150,6 @@ class SettingsPage extends StatelessWidget {
     );
   }
 
-  // ===== REUSABLE SETTINGS BUTTON =====
   Widget _buildSettingsButton({
     required IconData icon,
     required String label,
