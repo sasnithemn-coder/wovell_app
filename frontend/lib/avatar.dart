@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
-import 'models/user_progress.dart'; // ✅ adjust if your provider file is elsewhere
+import 'models/user_progress.dart'; 
 import 'main_home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class AvatarPage extends StatefulWidget {
   const AvatarPage({super.key});
@@ -14,14 +17,14 @@ class AvatarPage extends StatefulWidget {
 class _AvatarPageState extends State<AvatarPage> {
   String selectedGender = 'male';
 
-  // ✅ Returns the large preview avatar (full-body)
+  // Avatar Preview
   String getAvatarImage() {
     return selectedGender == 'male'
         ? 'assets/avatars/male_avatar.png'
         : 'assets/avatars/female_avatar.png';
   }
 
-  // ✅ Returns the bust version to be saved & used everywhere else
+  // Returns and save the bust only version of avatar
   String getBustImage() {
     return selectedGender == 'male'
         ? 'assets/avatars/male_bust.png'
@@ -50,7 +53,7 @@ class _AvatarPageState extends State<AvatarPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ====== Back & Title ======
+                // Back & Title 
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.h),
                   child: Row(
@@ -79,7 +82,7 @@ class _AvatarPageState extends State<AvatarPage> {
 
                 const Spacer(),
 
-                // ====== Avatar Preview ======
+                // Avatar Preview 
                 Center(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
@@ -95,7 +98,7 @@ class _AvatarPageState extends State<AvatarPage> {
 
                 const Spacer(),
 
-                // ====== Gender Selection Buttons ======
+                // Select gender
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -124,8 +127,7 @@ class _AvatarPageState extends State<AvatarPage> {
                 ),
 
                 SizedBox(height: 30.h),
-
-                // ====== Select Button ======
+                // Select Button
                 Center(
                   child: Padding(
                     padding: EdgeInsets.only(bottom: 40.h),
@@ -141,14 +143,13 @@ class _AvatarPageState extends State<AvatarPage> {
                         backgroundColor: const Color(0xFFFF7B00),
                       ),
                       onPressed: () async {
-                        // ✅ Save the bust image path to provider
+                        // Save the bust image path to provider
                         final bustPath = getBustImage();
                         await context
                             .read<UserProgress>()
                             .setAvatarBustPath(bustPath);
                         print('✅ Saved avatar bust path: $bustPath');
 
-                        // ✅ Continue with existing navigation logic
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
@@ -156,6 +157,7 @@ class _AvatarPageState extends State<AvatarPage> {
                           ),
                         );
                       },
+
                       child: Text(
                         'Select',
                         style: TextStyle(

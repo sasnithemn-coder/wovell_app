@@ -1,10 +1,16 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'models/user_progress.dart';
-import 'landing.dart'; // keep your existing landing import (eg SplashScreen)
+import 'landing.dart'; 
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(
     ChangeNotifierProvider(
       create: (_) => UserProgress(),
@@ -13,13 +19,14 @@ void main() {
   );
 }
 
+
 class WovellApp extends StatelessWidget {
   const WovellApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(375, 812), // Base design dimensions (iPhone X)
+      designSize: const Size(375, 812), 
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
@@ -31,7 +38,7 @@ class WovellApp extends StatelessWidget {
             fontFamily: 'Roboto',
             useMaterial3: true,
           ),
-          home: const SplashScreen(), // ensure SplashScreen is defined in landing.dart
+          home: const SplashScreen(), 
         );
       },
     );

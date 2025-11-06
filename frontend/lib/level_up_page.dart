@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
 import 'task1_page.dart';
-import 'widgets/profile_avatar.dart'; // ✅ added for dynamic avatar
+import 'widgets/profile_avatar.dart'; 
 
 class LevelUpPage extends StatefulWidget {
   const LevelUpPage({super.key});
@@ -25,15 +25,14 @@ class _LevelUpPageState extends State<LevelUpPage> {
     9: 0,
     10: 0,
   };
-
-  // ===== Top Bar =====
+  // Top Bar with Back, Notifications, and Profile Avatar 
   Widget _buildTopBar() {
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         child: Row(
           children: [
-            // ===== Back Button =====
+            // Back Button 
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: Container(
@@ -49,7 +48,7 @@ class _LevelUpPageState extends State<LevelUpPage> {
 
             const Spacer(),
 
-            // ===== Notifications & Profile Avatar =====
+            // Notifications & Profile Avatar 
             Row(
               children: [
                 GestureDetector(
@@ -72,8 +71,6 @@ class _LevelUpPageState extends State<LevelUpPage> {
                   ),
                 ),
                 SizedBox(width: 12.w),
-
-                // ✅ Replaced static CircleAvatar with ProfileAvatar
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -91,7 +88,7 @@ class _LevelUpPageState extends State<LevelUpPage> {
     );
   }
 
-  // ===== Level Info Card =====
+  // Level Info 
   Widget _buildLevelInfoCard() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
@@ -143,7 +140,7 @@ class _LevelUpPageState extends State<LevelUpPage> {
     );
   }
 
-  // ===== Level Buttons =====
+  // Level Buttons 
   Widget _buildLevelButton(int level) {
     int stars = starsEarned[level] ?? 0;
     return GestureDetector(
@@ -186,7 +183,7 @@ class _LevelUpPageState extends State<LevelUpPage> {
     );
   }
 
-  // ===== Level Roadmap =====
+  //  Roadmap 
   Widget _buildRoadMap() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -205,13 +202,12 @@ class _LevelUpPageState extends State<LevelUpPage> {
     );
   }
 
-  // ===== Build Main Page =====
+  // Main Page 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          // ===== Background Image =====
           Image.asset(
             'assets/94d36935-ead7-42da-95df-094b7543db71.jpg',
             fit: BoxFit.cover,
@@ -219,10 +215,8 @@ class _LevelUpPageState extends State<LevelUpPage> {
             height: double.infinity,
           ),
 
-          // ===== Dark Overlay =====
           Container(color: Colors.black.withValues(alpha: 0.3)),
 
-          // ===== Main Content =====
           Column(
             children: [
               _buildTopBar(),

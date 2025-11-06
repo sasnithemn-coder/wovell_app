@@ -59,7 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(height: 60.h),
 
-              // ✅ Custom thin checkmark icon
               const CustomCheckIcon(),
 
               SizedBox(height: 40.h),
@@ -84,7 +83,7 @@ class CustomCheckIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: Size(120.w, 120.w), // ✅ Responsive circle size
+      size: Size(120.w, 120.w), 
       painter: CheckPainter(),
     );
   }
@@ -96,7 +95,7 @@ class CheckPainter extends CustomPainter {
     final Paint circlePaint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.5.w; // ✅ Responsive stroke
+      ..strokeWidth = 3.5.w; 
 
     final Paint checkPaint = Paint()
       ..color = Colors.white
@@ -105,12 +104,10 @@ class CheckPainter extends CustomPainter {
       ..strokeCap = StrokeCap.round
       ..strokeJoin = StrokeJoin.round;
 
-    // Draw outer circle
     final Offset center = Offset(size.width / 2, size.height / 2);
-    final double radius = 55.w; // ✅ Responsive radius
+    final double radius = 55.w; 
     canvas.drawCircle(center, radius, circlePaint);
 
-    // Draw checkmark
     final Path checkPath = Path();
     checkPath.moveTo(size.width * 0.32, size.height * 0.52);
     checkPath.lineTo(size.width * 0.47, size.height * 0.68);

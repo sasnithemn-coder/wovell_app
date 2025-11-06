@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:provider/provider.dart';
 import 'notifications.dart';
 import 'profile_page.dart';
 import 'level_up_page.dart';
-import 'models/user_progress.dart';
-import 'widgets/profile_avatar.dart'; // ✅ Reusable avatar component
-
+import 'widgets/profile_avatar.dart'; 
 class EthicsEtiquettesPage extends StatelessWidget {
   const EthicsEtiquettesPage({super.key});
 
@@ -15,7 +12,6 @@ class EthicsEtiquettesPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // ===== Background Gradient =====
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -26,7 +22,6 @@ class EthicsEtiquettesPage extends StatelessWidget {
             ),
           ),
 
-          // ===== Background Image =====
           Image.asset(
             'assets/6be12f30-77ad-4317-b1bc-b8c1fce3d3cb.jpg',
             fit: BoxFit.cover,
@@ -34,10 +29,8 @@ class EthicsEtiquettesPage extends StatelessWidget {
             height: double.infinity,
           ),
 
-          // ===== Overlay Shade =====
           Container(color: Colors.black.withValues(alpha: 0.35)),
 
-          // ===== Page Content =====
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -47,7 +40,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
                       EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
                   child: Row(
                     children: [
-                      // ===== Back Button =====
+                      // Back Button 
                       GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
@@ -63,7 +56,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
 
                       const Spacer(),
 
-                      // ===== Notification Button =====
+                      // Notifications
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -86,7 +79,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
 
                       SizedBox(width: 12.w),
 
-                      // ===== Dynamic Profile Avatar (bust) =====
+                      // Profile Avatar (bust only) 
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
@@ -96,7 +89,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
                             ),
                           );
                         },
-                        child: const ProfileAvatar(radius: 18), // ✅ updated here
+                        child: const ProfileAvatar(radius: 18), 
                       ),
                     ],
                   ),
@@ -105,7 +98,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
 
               SizedBox(height: 20.h),
 
-              // ===== Header Title =====
+              // Title 
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -120,7 +113,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
               ),
               SizedBox(height: 10.h),
 
-              // ===== Subtitle =====
+              // Subtitle 
               Padding(
                 padding: EdgeInsets.only(left: 20.w),
                 child: Text(
@@ -135,7 +128,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
 
               SizedBox(height: 30.h),
 
-              // ===== Leaderboard + Medal Buttons =====
+              // Leaderboard + Medal Buttons
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 child: Row(
@@ -215,7 +208,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
 
               SizedBox(height: 25.h),
 
-              // ===== Special Features =====
+              // Special Features 
               Padding(
                 padding: EdgeInsets.only(left: 20.w, bottom: 10.h),
                 child: Text(
@@ -228,7 +221,6 @@ class EthicsEtiquettesPage extends StatelessWidget {
                 ),
               ),
 
-              // ===== Features List =====
               SizedBox(
                 height: 120.h,
                 child: ListView(
@@ -267,7 +259,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
 
               const Spacer(),
 
-              // ===== Level Up Button Section =====
+              // Level Up Button 
               Container(
                 width: double.infinity,
                 decoration: const BoxDecoration(
@@ -321,7 +313,7 @@ class EthicsEtiquettesPage extends StatelessWidget {
   }
 }
 
-// ===== Feature Card =====
+// Feature Card Widget
 class _FeatureCard extends StatelessWidget {
   final String title;
   final IconData icon;

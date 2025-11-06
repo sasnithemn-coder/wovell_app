@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'signup.dart';
-import 'main_home.dart'; // ✅ direct redirect here
+import 'main_home.dart'; 
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -52,13 +52,12 @@ class _SignInScreenState extends State<SignInScreen> {
       return;
     }
 
-    // ✅ Redirect directly to MainHomePage
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (_) => const MainHomePage()),
     );
   }
-
+  
   bool _isValidEmail(String email) =>
       RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
 
@@ -66,12 +65,24 @@ class _SignInScreenState extends State<SignInScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocus.removeListener(_scrollToField);
+    _passwordFocus.removeListener(_scrollToField);
+    _emailFocus.dispose();
+    _passwordFocus.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: Container(
         width: double.infinity,
-        height: double.infinity, // 🩵 ensures full gradient coverage
+        height: double.infinity, 
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.centerLeft,
@@ -85,7 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
             physics: const BouncingScrollPhysics(),
             child: ConstrainedBox(
               constraints: BoxConstraints(
-                minHeight: MediaQuery.of(context).size.height, // 🩵 fixes gap
+                minHeight: MediaQuery.of(context).size.height, 
               ),
               child: IntrinsicHeight(
                 child: Padding(

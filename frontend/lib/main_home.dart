@@ -35,7 +35,7 @@ class MainHomePage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // ====== TOP NAVBAR ======
+                // Top Bar with Menu, Notifications & Profile Avatar
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -64,7 +64,7 @@ class MainHomePage extends StatelessWidget {
                           },
                         ),
                         ProfileAvatar(
-                          radius: 20, // keep the same as your current icon size
+                          radius: 20, 
                           onTap: () {
                             Navigator.push(
                               context,
@@ -78,8 +78,7 @@ class MainHomePage extends StatelessWidget {
                 ),
 
                 SizedBox(height: 20.h),
-
-                // ====== WELCOME TEXT ======
+                // Welcome Text
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 4.w),
                   child: Text(
@@ -95,7 +94,7 @@ class MainHomePage extends StatelessWidget {
 
                 SizedBox(height: 35.h),
 
-                // ====== SKILL CARDS ======
+                // SKILL CARDS 
                 _buildSkillCard(
                   image: 'assets/public_speaking.jpg',
                   title: 'Public Speaking',
@@ -150,7 +149,7 @@ class MainHomePage extends StatelessWidget {
                     );
                   },
                 ),
-                SizedBox(height: 50.h), // final breathing space
+                SizedBox(height: 50.h), 
               ],
             ),
           ),
@@ -159,7 +158,7 @@ class MainHomePage extends StatelessWidget {
     );
   }
 
-  // Skill card widget (unchanged logic, fixed fit & spacing)
+  // Skill card widget 
   Widget _buildSkillCard({
     required String image,
     required String title,
@@ -170,10 +169,9 @@ class MainHomePage extends StatelessWidget {
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
-          // White container with text
           Container(
             width: double.infinity,
-            height: 110.h, // slightly taller for proportion
+            height: 110.h,
             margin: EdgeInsets.only(left: 65.w),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -202,7 +200,6 @@ class MainHomePage extends StatelessWidget {
             ),
           ),
 
-          // Left image — adjusted fit to prevent cropping
           Positioned(
             left: 0,
             child: ClipRRect(
@@ -211,7 +208,7 @@ class MainHomePage extends StatelessWidget {
                 image,
                 width: 130.w,
                 height: 110.h,
-                fit: BoxFit.contain, // ✅ prevents image cropping
+                fit: BoxFit.contain, 
                 alignment: Alignment.center,
               ),
             ),

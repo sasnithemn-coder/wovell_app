@@ -699,7 +699,7 @@ class _SpeechDutyPageState extends State<SpeechDutyPage>
 
 class _SevenDayMiniChart extends StatelessWidget {
   final List<int> values;
-  const _SevenDayMiniChart({required this.values, super.key});
+  const _SevenDayMiniChart({required this.values});
 
   @override
   Widget build(BuildContext context) {

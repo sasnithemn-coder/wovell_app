@@ -37,14 +37,13 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // 🔹 Top Bar (fixed)
+                // Top Bar, Notifications & Profile Avatar
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Back Button
                       GestureDetector(
                         onTap: () {
                           Navigator.pushReplacement(
@@ -60,8 +59,6 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
                           size: 22.sp,
                         ),
                       ),
-
-                      // Notification + Profile (right-aligned)
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -106,8 +103,6 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
                 ),
 
                 SizedBox(height: 16.h),
-
-                // 🔹 Banner Image
                 ClipRRect(
                   borderRadius: BorderRadius.circular(20.r),
                   child: Image.asset(
@@ -120,7 +115,7 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
 
                 SizedBox(height: 12.h),
 
-                // 🔹 Title
+                // Title
                 Text(
                   'Scriptsharp',
                   style: TextStyle(
@@ -132,7 +127,6 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
 
                 SizedBox(height: 20.h),
 
-                // 🔹 Topic Input Field
                 Container(
                   padding:
                       EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -153,7 +147,6 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
 
                 SizedBox(height: 18.h),
 
-                // 🔹 Body Label
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Container(
@@ -176,7 +169,6 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
 
                 SizedBox(height: 10.h),
 
-                // 🔹 Body Input
                 Container(
                   height: 220.h,
                   decoration: BoxDecoration(
@@ -200,7 +192,6 @@ class _ScriptSharpPageState extends State<ScriptSharpPage> {
 
                 SizedBox(height: 25.h),
 
-                // 🔹 Correction Button
                 ElevatedButton(
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(

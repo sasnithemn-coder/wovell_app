@@ -1,4 +1,3 @@
-// lib/voz_hut.dart
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -80,7 +79,6 @@ class _VozHutPageState extends State<VozHutPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Ensure ScreenUtil is initialized in main.dart. This file assumes it is.
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -205,7 +203,7 @@ class _TopicCard extends StatelessWidget {
   final String level;
   final VoidCallback onStart;
   const _TopicCard(
-      {required this.title, required this.level, required this.onStart, super.key});
+      {required this.title, required this.level, required this.onStart});
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +261,7 @@ class _TopicCard extends StatelessWidget {
 
 class _HistoryTile extends StatelessWidget {
   final Map<String, dynamic> entry;
-  const _HistoryTile({required this.entry, super.key});
+  const _HistoryTile({required this.entry});
 
   @override
   Widget build(BuildContext context) {
